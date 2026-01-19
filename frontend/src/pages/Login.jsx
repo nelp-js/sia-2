@@ -1,5 +1,6 @@
+// src/pages/Login.jsx
 import { useState } from 'react';
-import Form from '../components/Form';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 
 function Login() {
@@ -9,6 +10,8 @@ function Login() {
     });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,9 +44,11 @@ function Login() {
                 // Store tokens in localStorage
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
-                
-                // Redirect to home or dashboard
-                window.location.href = '/';
+
+                console.log('LOGIN SUCCESS, REDIRECTING');
+
+                // Redirect to home using React Router
+                navigate('/home');
             } else {
                 if (data.detail) {
                     setErrors({ general: data.detail });
@@ -72,7 +77,7 @@ function Login() {
                     </div>
                 )}
 
-                <div className="form-fields">
+                <form onSubmit={handleSubmit} className="form-fields">
                     <div className="form-group">
                         <label>Username</label>
                         <input
@@ -100,7 +105,7 @@ function Login() {
                     </div>
 
                     <button
-                        onClick={handleSubmit}
+                        type="submit"
                         disabled={loading}
                         className="submit-btn"
                     >
@@ -110,7 +115,7 @@ function Login() {
                     <p className="register-link">
                         Don't have an account? <a href="/register">Register here</a>
                     </p>
-                </div>
+                </form>
             </div>
         </div>
     );
