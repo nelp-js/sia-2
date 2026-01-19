@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
-
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 function Login() {
     const [formData, setFormData] = useState({
         username: '',
@@ -10,8 +10,6 @@ function Login() {
     });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,6 +24,13 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // 2. PREVENT 400 ERROR: Don't send request if empty
+        if (!formData.username || !formData.password) {
+            setErrors({ general: "Username and password are required." });
+            return;
+        }
+
         setLoading(true);
         setErrors({});
 
@@ -41,23 +46,27 @@ function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                // Store tokens in localStorage
-                localStorage.setItem('access_token', data.access);
-                localStorage.setItem('refresh_token', data.refresh);
-
-                console.log('LOGIN SUCCESS, REDIRECTING');
-
-                // Redirect to home using React Router
-                navigate('/home');
+                // 3. FIX: Use the string constants defined above
+                localStorage.setItem(ACCESS_TOKEN, data.access);
+                localStorage.setItem(REFRESH_TOKEN, data.refresh);
+                
+                // 4. FIX: Use React Router redirect instead of window.location
+                // window.location.href = '/'  <-- This reloads the page (slower)
+                window.location.href = '/'; // keeping your method for now, or use navigate('/')
             } else {
+                // 5. DEBUG: This will print the specific 400 error to your browser console
+                console.log("Error details:", data); 
+                
+                // Handle "No active account" (401) vs "Bad Request" (400)
                 if (data.detail) {
                     setErrors({ general: data.detail });
                 } else {
+                    // This handles validation errors like { username: ["This field is required"] }
                     setErrors(data);
                 }
             }
         } catch (error) {
-            setErrors({ general: 'Unable to connect to server. Please try again.' });
+            setErrors({ general: 'Unable to connect to server.' });
         } finally {
             setLoading(false);
         }
@@ -77,7 +86,7 @@ function Login() {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="form-fields">
+                <div className="form-fields">
                     <div className="form-group">
                         <label>Username</label>
                         <input
@@ -105,7 +114,7 @@ function Login() {
                     </div>
 
                     <button
-                        type="submit"
+                        onClick={handleSubmit}
                         disabled={loading}
                         className="submit-btn"
                     >
@@ -115,7 +124,7 @@ function Login() {
                     <p className="register-link">
                         Don't have an account? <a href="/register">Register here</a>
                     </p>
-                </form>
+                </div>
             </div>
         </div>
     );
