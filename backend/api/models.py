@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-
 class User(AbstractUser):
     BATCH_CHOICES = [
         ('2020', '2020'),
@@ -25,7 +24,7 @@ class User(AbstractUser):
     is_married = models.BooleanField(default=False)
     maiden_name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
-    #valid_id = models.FileField(upload_to='valid_ids/')
+    # valid_id = models.FileField(upload_to='valid_ids/')
     phone_number = models.CharField(max_length=15)
     batch = models.CharField(max_length=4, choices=BATCH_CHOICES)
     program = models.CharField(max_length=2, choices=PROGRAM_CHOICES)
@@ -34,11 +33,34 @@ class User(AbstractUser):
         return self.username
 
 
-class Note(models.Model):
-    title = models.CharField(max_length=100)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes")
+# class Note(models.Model):
+#     title = models.CharField(max_length=100)
+#     content = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes")
+
+#     def __str__(self):
+#         return self.title
+
+
+# --- NEW CODE ADDED BELOW ---
+
+class Event(models.Model):
+    # 'eventId' is created automatically by Django as 'id', so we don't need to define it manually.
+    
+    event_name = models.CharField(max_length=200)
+    event_description = models.TextField()
+    start_date = models.DateField()
+    start_time = models.TimeField()
+    venue = models.CharField(max_length=200)
+    category = models.CharField(max_length=100)
+
+    # This handles your "verification" requirement. 
+    # Default is False, so it is NOT published until an admin changes it to True.
+    is_approved = models.BooleanField(default=False)
+
+    # Links the event to the User who created it
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')
 
     def __str__(self):
-        return self.title
+        return self.event_name

@@ -1,143 +1,21 @@
-/* src/styles/Home.css */
-
-/* Main Container */
-.home-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-h2 {
-    color: #333;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-/* --- The Notes Grid --- */
-.notes-section {
-    margin-bottom: 40px;
-}
-
-/* This creates a responsive grid (cards automatically fit the row) */
-.notes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-/* Styling for individual Note cards */
-/* (Make sure your Note component has className="note-container") */
-.note-container {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.event-card {
+    border: 1px solid #ccc;
     padding: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    margin: 10px 0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
 
-.note-container:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.note-title {
-    font-size: 1.2rem;
+.status {
+    font-size: 0.9em;
     font-weight: bold;
-    margin-bottom: 10px;
-    color: #2c3e50;
-}
-
-.note-content {
     color: #555;
-    margin-bottom: 15px;
-    white-space: pre-wrap; /* Preserves line breaks in the note */
-}
-
-.note-date {
-    font-size: 0.8rem;
-    color: #999;
-    margin-bottom: 10px;
 }
 
 .delete-button {
-    background-color: #ff6b6b;
+    background-color: #ff4d4d;
     color: white;
     border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 5px 10px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s;
-    align-self: flex-end; /* Pushes button to the right */
-}
-
-.delete-button:hover {
-    background-color: #fa5252;
-}
-
-/* --- The Create Note Form --- */
-.create-note-section {
-    background-color: #f8f9fa;
-    padding: 25px;
-    border-radius: 10px;
-    border: 1px solid #e9ecef;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #495057;
-}
-
-/* Input and Textarea Styling */
-.form-input, 
-.form-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 1rem;
-    box-sizing: border-box; /* Ensures padding doesn't break width */
-    transition: border-color 0.2s;
-}
-
-.form-textarea {
-    min-height: 100px; /* Makes the content box taller */
-    resize: vertical;  /* Allows user to resize vertically only */
-}
-
-.form-input:focus, 
-.form-textarea:focus {
-    outline: none;
-    border-color: #4dabf7;
-    box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
-}
-
-/* Submit Button */
-.form-submit-btn {
-    background-color: #228be6;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-
-.form-submit-btn:hover {
-    background-color: #1c7ed6;
 }
