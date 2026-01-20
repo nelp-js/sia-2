@@ -1,8 +1,13 @@
 import axios from "axios";
 import { ACCESS_TOKEN } from "./constants";
 
+//for local
+// const api = axios.create({
+//   baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000",
+// });
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000",
+  baseURL: import.meta.env.VITE_API_URL || "https://sia-2.onrender.com",
 });
 
 api.interceptors.request.use(

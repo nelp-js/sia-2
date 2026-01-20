@@ -38,14 +38,24 @@ function Register() {
         setLoading(true);
         setErrors({});
 
+        //for local
+        // try {
+        //     const response = await fetch('http://127.0.0.1:8000/api/user/register/', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(formData)
+        //     });
+
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/user/register/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+    const response = await fetch('https://sia-2.onrender.com/api/user/register/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    });
 
             const data = await response.json();
 
