@@ -1,0 +1,43 @@
+
+@font-face {
+    font-family: 'Trajan Pro';
+    src: url('/fonts/TrajanPro-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Trajan Pro';
+    src: url('/fonts/TrajanPro-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Avenir LT Pro Light';
+    src: url('/fonts/AvenirLTProLight.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Maharlika';
+    src: url('/fonts/Maharlika-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Zapfino';
+    src: url('/fonts/Zapfino.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
