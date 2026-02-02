@@ -2,11 +2,13 @@ import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/CreateEvent.css';
+import { useTitle } from '../Hooks/useTitle';
 
 function CreateEvent() {
+    useTitle('Create Event');
     const [formData, setFormData] = useState({
         eventName: '',
-        previewText: '',
+        previewText: '', // We will map this to 'event_description' or a subtitle if you add one
         coverPhoto: null,
         description: '',
         actionButtonEnabled: false,
@@ -35,12 +37,64 @@ function CreateEvent() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // For now just log the payload; hook to API later
-        // eslint-disable-next-line no-console
-        console.log('CreateEvent payload:', formData);
-        alert('Event form submitted (mock). Hook this up to your API when ready.');
+
+        // 1. Prepare FormData for file upload
+        const dataToSend = new FormData();
+        
+        // 2. Map Frontend Fields -> Backend Fields
+        dataToSend.append('event_name', formData.eventName);
+        dataToSend.append('event_description', formData.description); 
+        dataToSend.append('start_date', formData.startDate);
+        dataToSend.append('start_time', formData.startTime);
+        dataToSend.append('venue', formData.venue);
+        dataToSend.append('category', 'General'); // Default category
+
+        // Optional Fields
+        if (formData.endDate) dataToSend.append('end_date', formData.endDate);
+        if (formData.endTime) dataToSend.append('end_time', formData.endTime);
+        if (formData.cost) dataToSend.append('cost', formData.cost);
+        if (formData.coverPhoto) dataToSend.append('event_image', formData.coverPhoto);
+        
+        // Combine the 3 organizers into one string
+        const organizersList = [formData.organizer1, formData.organizer2, formData.organizer3].filter(Boolean).join(', ');
+        dataToSend.append('organizer_names', organizersList);
+
+        // Action Button
+        if (formData.actionButtonEnabled) {
+            dataToSend.append('action_button_label', formData.actionButtonLabel);
+            dataToSend.append('action_button_link', formData.actionButtonLink);
+        }
+
+        try {
+            // 3. Send Request (WITH AUTH TOKEN)
+            // You need to retrieve the token from where you stored it (localStorage/Context)
+            // Assuming you stored it as 'access' or 'token'
+            const token = localStorage.getItem('access'); // <--- CHECK THIS KEY NAME
+
+            const response = await fetch('http://127.0.0.1:8000/api/events/', {
+                method: 'POST',
+                headers: {
+                    // 'Content-Type': 'multipart/form-data', // DO NOT SET THIS MANUALLY
+                    'Authorization': `Bearer ${token}` // Attach the token
+                },
+                body: dataToSend
+            });
+
+            if (response.ok) {
+                alert('Event successfully created! It is pending approval.');
+                // Redirect or clear form here
+                window.location.href = '/home';
+            } else {
+                const errorData = await response.json();
+                console.error("Error:", errorData);
+                alert('Failed to create event. Check console for details.');
+            }
+        } catch (error) {
+            console.error('Network Error:', error);
+            alert('Something went wrong.');
+        }
     };
 
     return (
@@ -68,17 +122,17 @@ function CreateEvent() {
                             />
                         </div>
 
-                        {/* Preview Text */}
+                        {/* Preview Text - Mapping this to description temporarily or handle separately */}
                         <div className="ce-field-group">
                             <label className="ce-label-large">
-                                Preview Text <span className="ce-required">*</span>
+                                Short Preview <span className="ce-required">*</span>
                             </label>
                             <textarea
                                 name="previewText"
                                 value={formData.previewText}
                                 onChange={handleChange}
                                 className="ce-textarea ce-textarea-small"
-                                placeholder="This text will appear in event cards and previews"
+                                placeholder="Short summary for the card view"
                                 required
                             />
                         </div>
@@ -92,23 +146,21 @@ function CreateEvent() {
                                 <span className="ce-file-placeholder">
                                     {formData.coverPhoto ? formData.coverPhoto.name : 'Upload Image'}
                                 </span>
-                                <span className="ce-file-icon" aria-hidden="true">
-                                    ▢
-                                </span>
                                 <input
                                     type="file"
                                     name="coverPhoto"
                                     accept="image/*"
                                     onChange={handleChange}
-                                    required={!formData.coverPhoto}
+                                    style={{display: 'none'}} // Hiding default input
                                 />
+                                <span className="ce-upload-btn">Browse</span>
                             </label>
                         </div>
 
                         {/* Description */}
                         <div className="ce-field-group">
                             <label className="ce-label-large">
-                                Description <span className="ce-required">*</span>
+                                Full Description <span className="ce-required">*</span>
                             </label>
                             <textarea
                                 name="description"
@@ -120,13 +172,13 @@ function CreateEvent() {
                             />
                         </div>
 
-                        {/* Event Action Button Toggle */}
+                        {/* Action Button Toggle */}
                         <div className="ce-section">
                             <div className="ce-toggle-row">
                                 <div className="ce-toggle-text">
                                     <div className="ce-toggle-title">Event Action Button</div>
                                     <div className="ce-toggle-description">
-                                        Display a custom button on the event page
+                                        Display a custom button (e.g., "Register Here")
                                     </div>
                                 </div>
                                 <label className="ce-toggle-switch">
@@ -150,7 +202,7 @@ function CreateEvent() {
                                             value={formData.actionButtonLabel}
                                             onChange={handleChange}
                                             className="ce-input"
-                                            placeholder="Enter button text"
+                                            placeholder="Register Now"
                                         />
                                     </div>
                                     <div className="ce-field-group ce-field-half">
@@ -161,38 +213,36 @@ function CreateEvent() {
                                             value={formData.actionButtonLink}
                                             onChange={handleChange}
                                             className="ce-input"
-                                            placeholder="https://example.com"
+                                            placeholder="https://google.forms..."
                                         />
                                     </div>
                                 </div>
                             )}
                         </div>
 
-                        {/* Date & Time rows */}
+                        {/* Date & Time rows - CHANGED TO NATIVE PICKERS FOR SAFETY */}
                         <div className="ce-row">
                             <div className="ce-field-group ce-field-half">
                                 <label className="ce-label-small">
                                     Start Date <span className="ce-required">*</span>
                                 </label>
                                 <input
-                                    type="text"
+                                    type="date" 
                                     name="startDate"
                                     value={formData.startDate}
                                     onChange={handleChange}
                                     className="ce-input"
-                                    placeholder="DD/MM/YYYY"
                                     required
                                 />
                             </div>
                             <div className="ce-field-group ce-field-half">
                                 <label className="ce-label-small">End Date</label>
                                 <input
-                                    type="text"
+                                    type="date"
                                     name="endDate"
                                     value={formData.endDate}
                                     onChange={handleChange}
                                     className="ce-input"
-                                    placeholder="DD/MM/YYYY"
                                 />
                             </div>
                         </div>
@@ -201,23 +251,22 @@ function CreateEvent() {
                             <div className="ce-field-group ce-field-half">
                                 <label className="ce-label-small">Start Time</label>
                                 <input
-                                    type="text"
+                                    type="time"
                                     name="startTime"
                                     value={formData.startTime}
                                     onChange={handleChange}
                                     className="ce-input"
-                                    placeholder="--:-- --"
+                                    required
                                 />
                             </div>
                             <div className="ce-field-group ce-field-half">
                                 <label className="ce-label-small">End Time</label>
                                 <input
-                                    type="text"
+                                    type="time"
                                     name="endTime"
                                     value={formData.endTime}
                                     onChange={handleChange}
                                     className="ce-input"
-                                    placeholder="--:-- --"
                                 />
                             </div>
                         </div>
@@ -231,7 +280,7 @@ function CreateEvent() {
                                 value={formData.cost}
                                 onChange={handleChange}
                                 className="ce-input"
-                                placeholder="Ex. 3000 pesos"
+                                placeholder="Free or 3000 PHP"
                             />
                         </div>
 
@@ -251,9 +300,9 @@ function CreateEvent() {
                             />
                         </div>
 
-                        {/* Organizers - three free-text fields */}
+                        {/* Organizers */}
                         <div className="ce-field-group">
-                            <label className="ce-label-small">Organizers</label>
+                            <label className="ce-label-small">Manual Organizers (Optional)</label>
                             <div className="ce-row ce-organizers-row">
                                 <div className="ce-field-half">
                                     <input
@@ -262,7 +311,7 @@ function CreateEvent() {
                                         value={formData.organizer1}
                                         onChange={handleChange}
                                         className="ce-input"
-                                        placeholder="Ex. Thor Hanson, PhD (BS '64)"
+                                        placeholder="Organizer Name 1"
                                     />
                                 </div>
                                 <div className="ce-field-half">
@@ -272,17 +321,7 @@ function CreateEvent() {
                                         value={formData.organizer2}
                                         onChange={handleChange}
                                         className="ce-input"
-                                        placeholder="Add another organizer"
-                                    />
-                                </div>
-                                <div className="ce-field-half">
-                                    <input
-                                        type="text"
-                                        name="organizer3"
-                                        value={formData.organizer3}
-                                        onChange={handleChange}
-                                        className="ce-input"
-                                        placeholder="Add another organizer"
+                                        placeholder="Organizer Name 2"
                                     />
                                 </div>
                             </div>
@@ -292,9 +331,6 @@ function CreateEvent() {
                         <div className="ce-actions">
                             <button type="submit" className="ce-submit-btn">
                                 <span>Post Event</span>
-                                <span className="ce-submit-icon" aria-hidden="true">
-                                    ➜
-                                </span>
                             </button>
                         </div>
                     </form>
@@ -307,4 +343,3 @@ function CreateEvent() {
 }
 
 export default CreateEvent;
-

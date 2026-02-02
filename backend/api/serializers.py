@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             "id", "first_name", "middle_name", "last_name", 
             "is_married", "maiden_name", "email", "confirm_email",
-            "phone_number", "batch", "program",
+            "valid_id", "phone_number", "batch", "program",
             "username", "password"
         ]
         extra_kwargs = {
@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             "batch": {"required": True},
             "program": {"required": True},
             "maiden_name": {"required": False},
+            "valid_id": {"required": True},
         }
 
     def validate(self, data):
@@ -49,7 +50,9 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            "id", "event_name", "event_description", "start_date", 
-            "start_time", "venue", "category", "is_approved", "organizer"
+            "id", "event_name", "event_description", "start_date", "end_date",
+            "start_time", "end_time", "venue", "category", "is_approved", 
+            "organizer", "event_image", "cost", "organizer_names", 
+            "action_button_label", "action_button_link"
         ]
         read_only_fields = ["is_approved", "organizer"]

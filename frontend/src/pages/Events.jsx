@@ -2,8 +2,10 @@ import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Events.css';
+import { useTitle } from '../Hooks/useTitle';
 
 function Events() {
+    useTitle('Events');
     const [searchQuery, setSearchQuery] = useState('');
     const [weekdays, setWeekdays] = useState('Weekdays');
     const [eventType, setEventType] = useState('Event type');

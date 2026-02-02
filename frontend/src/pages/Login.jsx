@@ -4,8 +4,10 @@ import '../styles/Login.css';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useTitle } from '../Hooks/useTitle';
 
 function Login() {
+    useTitle('Login');
     const [formData, setFormData] = useState({
         username: '',
         password: ''

@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "render",
+            "connectString": "postgresql://addu_alumni_db_user:baqBqED3i5Py29ZpfAULUCuCadaignjz@dpg-d5nj8pt6ubrc73at8tm0-a.singapore-postgres.render.com/addu_alumni_db?sslmode=require",
+            "database": "addu_alumni_db",
+            "username": "addu_alumni_db_user"
+        }
+    ]
+}
