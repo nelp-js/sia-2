@@ -65,9 +65,7 @@ function Login() {
                 localStorage.setItem(ACCESS_TOKEN, data.access);
                 localStorage.setItem(REFRESH_TOKEN, data.refresh);
                 
-                // 4. FIX: Use React Router redirect instead of window.location
-                // window.location.href = '/'  <-- This reloads the page (slower)
-                window.location.href = '/'; // keeping your method for now, or use navigate('/')
+                navigate('/');
             } else {
                 // 5. DEBUG: This will print the specific 400 error to your browser console
                 console.log("Error details:", data); 

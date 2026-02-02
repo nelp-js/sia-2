@@ -4,12 +4,14 @@ import Footer from '../components/Footer';
 import '../styles/CreateEvent.css';
 import { useTitle } from '../Hooks/useTitle';
 import { ACCESS_TOKEN } from '../constants';
+import { useNavigate } from 'react-router-dom';
 
 function CreateEvent() {
     useTitle('Create Event');
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         eventName: '',
-        previewText: '', // We will map this to 'event_description' or a subtitle if you add one
+        previewText: '',
         coverPhoto: null,
         description: '',
         actionButtonEnabled: false,
@@ -70,8 +72,6 @@ function CreateEvent() {
 
         // try {
         //     // 3. Send Request (WITH AUTH TOKEN)
-        //     // You need to retrieve the token from where you stored it (localStorage/Context)
-        //     // Assuming you stored it as 'access' or 'token'
         //     const token = localStorage.getItem(ACCESS_TOKEN);
 
         //     const response = await fetch('http://127.0.0.1:8000/api/events/', {
@@ -85,15 +85,12 @@ function CreateEvent() {
 
         try {
             // 3. Send Request (WITH AUTH TOKEN)
-            // You need to retrieve the token from where you stored it (localStorage/Context)
             const token = localStorage.getItem(ACCESS_TOKEN);
 
-            // CHANGE: Use your live Render URL here
             const response = await fetch('https://sia-2.onrender.com/api/events/', {
                 method: 'POST',
                 headers: {
-                    // 'Content-Type': 'multipart/form-data', // Correct: Keep this commented out
-                    'Authorization': `Bearer ${token}` // Attach the token
+                    'Authorization': `Bearer ${token}`
                 },
                 body: dataToSend
             });
@@ -345,6 +342,14 @@ function CreateEvent() {
 
                         {/* Submit button */}
                         <div className="ce-actions">
+                            <button 
+                                type="button" 
+                                className="ce-cancel-btn" 
+                                onClick={() => navigate(-1)} // -1 means "Go back one page"
+                             >
+                                Cancel
+                            </button>
+
                             <button type="submit" className="ce-submit-btn">
                                 <span>Post Event</span>
                             </button>
