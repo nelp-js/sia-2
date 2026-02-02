@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/CreateEvent.css';
 import { useTitle } from '../Hooks/useTitle';
+import { ACCESS_TOKEN } from '../constants';
 
 function CreateEvent() {
     useTitle('Create Event');
@@ -67,16 +68,31 @@ function CreateEvent() {
             dataToSend.append('action_button_link', formData.actionButtonLink);
         }
 
+        // try {
+        //     // 3. Send Request (WITH AUTH TOKEN)
+        //     // You need to retrieve the token from where you stored it (localStorage/Context)
+        //     // Assuming you stored it as 'access' or 'token'
+        //     const token = localStorage.getItem(ACCESS_TOKEN);
+
+        //     const response = await fetch('http://127.0.0.1:8000/api/events/', {
+        //         method: 'POST',
+        //         headers: {
+        //             // 'Content-Type': 'multipart/form-data', // DO NOT SET THIS MANUALLY
+        //             'Authorization': `Bearer ${token}` // Attach the token
+        //         },
+        //         body: dataToSend
+        //     });
+
         try {
             // 3. Send Request (WITH AUTH TOKEN)
             // You need to retrieve the token from where you stored it (localStorage/Context)
-            // Assuming you stored it as 'access' or 'token'
-            const token = localStorage.getItem('access'); // <--- CHECK THIS KEY NAME
+            const token = localStorage.getItem(ACCESS_TOKEN);
 
-            const response = await fetch('http://127.0.0.1:8000/api/events/', {
+            // CHANGE: Use your live Render URL here
+            const response = await fetch('https://sia-2.onrender.com/api/events/', {
                 method: 'POST',
                 headers: {
-                    // 'Content-Type': 'multipart/form-data', // DO NOT SET THIS MANUALLY
+                    // 'Content-Type': 'multipart/form-data', // Correct: Keep this commented out
                     'Authorization': `Bearer ${token}` // Attach the token
                 },
                 body: dataToSend

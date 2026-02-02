@@ -156,3 +156,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",      # Trust ANY Vercel app (including previews)
+    "https://*.onrender.com",    # Trust ANY Render app
+    "http://127.0.0.1",          # Localhost
+    "http://localhost",
+]
