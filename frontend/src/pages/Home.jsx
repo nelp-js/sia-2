@@ -1,164 +1,84 @@
-import { useState, useEffect } from "react";
-import api from "../api";
-import "../styles/Home.css";
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import '../styles/Home.css';
 
 function Home() {
-    const [events, setEvents] = useState([]);
-    
-    // State for the Form Fields
-    const [eventName, setEventName] = useState("");
-    const [eventDescription, setEventDescription] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [venue, setVenue] = useState("");
-    const [category, setCategory] = useState("");
-
-    useEffect(() => {
-        getEvents();
-    }, []);
-
-    const getEvents = () => {
-        api
-            .get("/api/events/")
-            .then((res) => res.data)
-            .then((data) => {
-                setEvents(data);
-                console.log(data);
-            })
-            .catch((err) => alert(err));
-    };
-
-    const deleteEvent = (id) => {
-        api
-            .delete(`/api/events/delete/${id}/`)
-            .then((res) => {
-                if (res.status === 204) alert("Event deleted!");
-                else alert("Failed to delete event.");
-                getEvents();
-            })
-            .catch((error) => alert(error));
-    };
-
-    const createEvent = (e) => {
-        e.preventDefault();
-        
-        // Match these keys exactly with your Django Serializer
-        const payload = {
-            event_name: eventName,
-            event_description: eventDescription,
-            start_date: startDate,
-            start_time: startTime,
-            venue: venue,
-            category: category
-        };
-
-        api
-            .post("/api/events/", payload)
-            .then((res) => {
-                if (res.status === 201) alert("Event created!");
-                else alert("Failed to create event.");
-                // Clear form
-                setEventName("");
-                setEventDescription("");
-                setStartDate("");
-                setStartTime("");
-                setVenue("");
-                setCategory("");
-                getEvents();
-            })
-            .catch((err) => alert(err));
-    };
+    const cards = [
+        {
+            image: '/cs alumni.jpg',
+            title: 'CS Alumni Gathering Kickoff 2025',
+            description: 'Computer Studies Alumni heaped together to celebrate, reunited at the Calungsod San-Vitores Center for an unforgettable evening of connection and celebration.',
+        },
+        {
+            image: '/mugna ui.jpg',
+            title: 'Talks & Workshops | UI/UX as a Career in 2025',
+            description: 'Mr. Erbert Ryan Moralde shared valuable insights and tips on pursuing UI/UX as a career with the CS Cluster students at Bapa Benny Tudtud Auditorium.',
+        },
+        {
+            image: '/aws talk.jpg',
+            title: 'Talks & Workshops | Securing Serverless Applications',
+            description: 'Mr. Ike Yuson shows the CS Cluster students at F600/601 how to secure serverless applications for their web projects.',
+        },
+    ];
 
     return (
-        <div>
-            {/* --- SECTION 1: EVENT LIST --- */}
-            <div className="events-section">
-                <h2>Upcoming Events</h2>
-                {events.map((event) => (
-                    <div className="event-card" key={event.id}>
-                        <h3>{event.event_name}</h3>
-                        <p><strong>Date:</strong> {event.start_date} at {event.start_time}</p>
-                        <p><strong>Venue:</strong> {event.venue}</p>
-                        <p><strong>Category:</strong> {event.category}</p>
-                        <p>{event.event_description}</p>
-                        <p className="status">
-                            Status: {event.is_approved ? "✅ Published" : "⏳ Pending Admin Approval"}
-                        </p>
-                        <button className="delete-button" onClick={() => deleteEvent(event.id)}>
-                            Delete
-                        </button>
-                    </div>
-                ))}
-            </div>
+        <div className="home-page">
+            <Header />
 
-            {/* --- SECTION 2: CREATE EVENT FORM --- */}
-            <h2>Create a New Event</h2>
-            <form onSubmit={createEvent}>
-                <label>Event Name:</label>
-                <br />
-                <input
-                    type="text"
-                    required
-                    value={eventName}
-                    onChange={(e) => setEventName(e.target.value)}
-                />
-                <br />
-                
-                <label>Description:</label>
-                <br />
-                <textarea
-                    required
-                    value={eventDescription}
-                    onChange={(e) => setEventDescription(e.target.value)}
-                ></textarea>
-                <br />
+            <main className="home-main">
+                {/* Hero */}
+                <section className="home-hero">
+                    <h1 className="hero-title">Ad Majorem Dei Gloriam!</h1>
+                    <p className="hero-message">
+                        Empowered by Fortes in Fide, we strive to inspire, lead, and give back.
+                    </p>
+                    <Link to="/login" className="hero-cta">
+                        Reconnect Today
+                    </Link>
+                </section>
 
-                <label>Start Date:</label>
-                <br />
-                <input
-                    type="date"
-                    required
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                />
-                <br />
+                {/* Full-width image */}
+                <section className="home-image-section">
+                    <img
+                        src="/bg01.jpg"
+                        alt="Ateneo campus"
+                        className="home-hero-image"
+                    />
+                </section>
 
-                <label>Start Time:</label>
-                <br />
-                <input
-                    type="time"
-                    required
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                />
-                <br />
+                {/* Welcome */}
+                <section className="home-welcome">
+                    <h2 className="welcome-title">WELCOME HOME.</h2>
+                    <p className="welcome-subheading">
+                        Alumni news, feature stories and live events.
+                    </p>
+                </section>
 
-                <label>Venue:</label>
-                <br />
-                <input
-                    type="text"
-                    required
-                    value={venue}
-                    onChange={(e) => setVenue(e.target.value)}
-                />
-                <br />
+                {/* Cards */}
+                <section className="home-cards">
+                    {cards.map((card, index) => (
+                        <article key={index} className="home-card">
+                            <div className="home-card-image-wrap">
+                                <img
+                                    src={card.image}
+                                    alt=""
+                                    className="home-card-image"
+                                />
+                            </div>
+                            <div className="home-card-content">
+                                <h3 className="home-card-title">{card.title}</h3>
+                                <p className="home-card-description">{card.description}</p>
+                                <button type="button" className="home-card-btn">
+                                    Read More
+                                </button>
+                            </div>
+                        </article>
+                    ))}
+                </section>
+            </main>
 
-                <label>Category:</label>
-                <br />
-                <select 
-                    value={category} 
-                    onChange={(e) => setCategory(e.target.value)} 
-                    required
-                >
-                    <option value="">Select a category...</option>
-                    <option value="Academic">Academic</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Social">Social</option>
-                </select>
-                <br />
-
-                <input type="submit" value="Submit Event"></input>
-            </form>
+            <Footer />
         </div>
     );
 }

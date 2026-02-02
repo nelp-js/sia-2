@@ -6,6 +6,10 @@
 /* Login Page Container */
 .login-page {
     min-height: 100vh;
+
+
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
     position: relative;
@@ -13,6 +17,8 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    overflow-x: hidden;
 }
 
 .login-page::before {
@@ -26,64 +32,10 @@
     z-index: 0;
 }
 
-/* Header */
-.login-header {
-    background-color: #040354;
-    padding: 15px 0;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-logo-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.header-logo {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-}
-
-.header-title {
-    color: white;
-    font-size: 18px;
-    letter-spacing: 0.5px;
-    font-family: 'Trajan Pro', serif;
-}
-
-.header-nav {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-}
-
-.header-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: opacity 0.3s ease;
-}
-
-.header-nav a:hover {
-    opacity: 0.8;
-}
-
 /* Main Content */
 .login-main {
     flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,6 +47,8 @@
 .login-container {
     width: 100%;
     max-width: 500px;
+    min-width: 0;
+    padding: 0;
 }
 
 .login-form {
@@ -103,6 +57,8 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     padding: 50px 40px;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 /* Form Logo Section */
@@ -119,12 +75,11 @@
 }
 
 .form-brand-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
-    margin: 0;
-    letter-spacing: 0.5px;
-    font-family: 'Trajan Pro', serif;
+    font-family: 'Trajan Pro', sans-serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0 0 12px 0;
 }
 
 /* Form Title */
@@ -301,170 +256,89 @@
     opacity: 0.8;
 }
 
-/* Footer */
-.login-footer {
-    background-color: #040354;
-    padding: 40px 0 30px;
-    position: relative;
-    z-index: 1;
-    margin-top: auto;
-}
 
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 30px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-}
-
-.footer-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.footer-logo-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-}
-
-.footer-logo {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-}
-
-.footer-title {
-    color: white;
-    font-size: 18px;
-    letter-spacing: 0.5px;
-    font-family: 'Trajan Pro', serif;
-}
-
-.footer-address {
-    color: white;
-    font-size: 13px;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.footer-section h3 {
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 10px 0;
-}
-
-.footer-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.footer-links a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    transition: opacity 0.3s ease;
-}
-
-.footer-links a:hover {
-    opacity: 0.8;
-}
-
-/* Social Icons */
-.social-icons {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.social-icons a {
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    transition: opacity 0.3s ease;
-}
-
-.social-icons a:hover {
-    opacity: 0.8;
-}
-
-.social-icons svg {
-    width: 24px;
-    height: 24px;
-}
-
-/* Responsive Design */
+/* Responsive Design - Sign In / Login */
 @media (max-width: 1024px) {
-    .footer-content {
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 30px;
+    .login-main {
+        padding: 30px 24px;
     }
 
-    .footer-events {
-        grid-column: 1 / -1;
+    .login-form {
+        padding: 45px 36px;
     }
 }
 
 @media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        gap: 15px;
-        padding: 0 20px;
+    .login-main {
+        padding: 24px 20px;
     }
 
-    .header-nav {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
+    .login-container {
+        max-width: 100%;
     }
 
     .login-form {
         padding: 40px 30px;
     }
 
+    .form-logo-section {
+        margin-bottom: 24px;
+    }
+
+    .form-logo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .form-brand-title {
+        font-size: 22px;
+    }
+
     .form-title {
         font-size: 28px;
+        margin-bottom: 24px;
     }
 
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
+    .form-fields {
+        gap: 18px;
     }
 
-    .footer-section {
-        text-align: center;
+    .form-group label {
+        font-size: 14px;
     }
 
-    .footer-logo-section {
-        justify-content: center;
+    .form-group input {
+        padding: 12px 14px;
+        font-size: 16px; /* prevents zoom on iOS */
     }
 
-    .social-icons {
-        justify-content: center;
+    .submit-btn {
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    .form-links {
+        margin-top: 18px;
     }
 }
 
 @media (max-width: 480px) {
     .login-main {
-        padding: 20px 15px;
+        padding: 20px 16px;
     }
 
     .login-form {
         padding: 30px 20px;
     }
 
+    .form-logo-section {
+        margin-bottom: 20px;
+    }
+
     .form-logo {
         width: 60px;
         height: 60px;
+        margin-bottom: 12px;
     }
 
     .form-brand-title {
@@ -473,25 +347,62 @@
 
     .form-title {
         font-size: 24px;
+        margin-bottom: 20px;
     }
 
-    .header-nav {
-        gap: 10px;
-        font-size: 12px;
+    .form-fields {
+        gap: 16px;
     }
 
-    .header-nav a {
-        font-size: 12px;
+    .form-group label {
+        font-size: 13px;
     }
 
     .form-group input {
         padding: 10px 12px;
-        font-size: 14px;
+        font-size: 16px;
+    }
+
+    .password-input-wrapper input {
+        padding-right: 44px;
     }
 
     .submit-btn {
         padding: 12px;
         font-size: 15px;
+    }
+
+    .form-links {
+        margin-top: 16px;
+        gap: 12px;
+    }
+
+    .forgot-password-link,
+    .register-link {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 375px) {
+    .login-main {
+        padding: 16px 12px;
+    }
+
+    .login-form {
+        padding: 24px 16px;
+    }
+
+    .form-logo {
+        width: 52px;
+        height: 52px;
+    }
+
+    .form-brand-title {
+        font-size: 18px;
+    }
+
+    .form-title {
+        font-size: 22px;
     }
 }
 

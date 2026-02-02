@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import '../styles/Register.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -83,23 +85,7 @@ function Register() {
 
     return (
         <div className="register-page">
-            {/* Header */}
-            <header className="login-header">
-                <div className="header-content">
-                    <div className="header-logo-section">
-                        <img src="/addu-logo-white.png" alt="ADDU Logo" className="header-logo" />
-                        <span className="header-title">ATENEO ALUMNI</span>
-                    </div>
-                    <nav className="header-nav">
-                        <a href="#news">News</a>
-                        <a href="#events">Events</a>
-                        <a href="#engage">Engage</a>
-                        <a href="#support">Support</a>
-                        <a href="#volunteer">Volunteer</a>
-                        <a href="#profile">Profile</a>
-                    </nav>
-                </div>
-            </header>
+            <Header />
 
             {/* Main Content */}
             <main className="register-main">
@@ -120,14 +106,14 @@ function Register() {
                     <div className="form-fields">
                         <div className="name-fields">
                             <div className="form-group">
-                                <label>First Name *</label>
+                                <span><label>First Name</label><label style={{color: 'red'}}> *</label></span>
                                 <input
                                     type="text"
                                     name="first_name"
                                     value={formData.first_name}
                                     onChange={handleChange}
                                     className={errors.first_name ? 'error' : ''}
-                                    placeholder="Arisa"
+                                    placeholder="Maria Cristina"
                                 />
                                 {errors.first_name && <span className="field-error">{errors.first_name}</span>}
                             </div>
@@ -139,21 +125,20 @@ function Register() {
                                     name="middle_name"
                                     value={formData.middle_name}
                                     onChange={handleChange}
-                                    className={errors.middle_name ? 'error' : ''}
-                                    placeholder="Baran"
+                                    placeholder="Reyes"
                                 />
                                 {errors.middle_name && <span className="field-error">{errors.middle_name}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label>Last Name *</label>
+                                <span><label>Last Name</label><label style={{color: 'red'}}> *</label></span>
                                 <input
                                     type="text"
                                     name="last_name"
                                     value={formData.last_name}
                                     onChange={handleChange}
                                     className={errors.last_name ? 'error' : ''}
-                                    placeholder="Nakagawa"
+                                    placeholder="Santos"
                                 />
                                 {errors.last_name && <span className="field-error">{errors.last_name}</span>}
                             </div>
@@ -173,7 +158,7 @@ function Register() {
 
                         {formData.is_married && (
                             <div className="form-group">
-                                <label>Maiden Name</label>
+                                <span><label>Maiden Name</label><label style={{color: 'red'}}> *</label></span>
                                 <input
                                     type="text"
                                     name="maiden_name"
@@ -187,34 +172,34 @@ function Register() {
 
                         <div className="email-fields">
                             <div className="form-group">
-                                <label>Email *</label>
+                                <span><label>Email</label><label style={{color: 'red'}}> *</label></span>
                                 <input
                                     type="email"
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
                                     className={errors.email ? 'error' : ''}
-                                    placeholder="abnakagawa@addu.edu.ph"
+                                    placeholder="mcrs@addu.edu.ph"
                                 />
                                 {errors.email && <span className="field-error">{errors.email}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label>Confirm Email *</label>
+                                <span><label>Confirm Email</label><label style={{color: 'red'}}> *</label></span>
                                 <input
                                     type="email"
                                     name="confirm_email"
                                     value={formData.confirm_email}
                                     onChange={handleChange}
                                     className={errors.confirm_email ? 'error' : ''}
-                                    placeholder="abnakagawa@addu.edu.ph"
+                                    placeholder="mcrs@addu.edu.ph"
                                 />
                                 {errors.confirm_email && <span className="field-error">{errors.confirm_email}</span>}
                             </div>
                         </div>
 
                         <div className="form-group">
-                            <label>Valid ID *</label>
+                            <span><label>Valid ID</label><label style={{color: 'red'}}> *</label></span>
                             <button type="button" className="upload-btn">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -226,7 +211,7 @@ function Register() {
                         </div>
 
                         <div className="form-group">
-                            <label>Phone Number *</label>
+                            <span><label>Phone Number</label><label style={{color: 'red'}}> *</label></span>
                             <input
                                 type="tel"
                                 name="phone_number"
@@ -240,7 +225,7 @@ function Register() {
 
                         <div className="batch-program-fields">
                             <div className="form-group">
-                                <label>Batch *</label>
+                                <span><label>Batch Year</label><label style={{color: 'red'}}> *</label></span>
                                 <select
                                     name="batch"
                                     value={formData.batch}
@@ -248,24 +233,90 @@ function Register() {
                                     className={errors.batch ? 'error' : ''}
                                 >
                                     <option value="">Select Batch</option>
-                                    <option value="2020">2025</option>
-                                    <option value="2021">2024</option>
-                                    <option value="2022">2023</option>
-                                    <option value="2023">2022</option>
-                                    <option value="2024">2021</option>
-                                    <option value="2025">2020</option>
-                                    <option value="2020">2019</option>
-                                    <option value="2021">2018</option>
-                                    <option value="2022">2017</option>
-                                    <option value="2023">2016</option>
-                                    <option value="2024">2015</option>
-                                    <option value="2025">2014</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2014">2014</option>
+                                    <option value="2013">2013</option>
+                                    <option value="2012">2012</option>
+                                    <option value="2011">2011</option>
+                                    <option value="2010">2010</option>
+                                    <option value="2009">2009</option>
+                                    <option value="2008">2008</option>
+                                    <option value="2007">2007</option>
+                                    <option value="2006">2006</option>
+                                    <option value="2005">2005</option>
+                                    <option value="2004">2004</option>
+                                    <option value="2003">2003</option>
+                                    <option value="2002">2002</option>
+                                    <option value="2001">2001</option>
+                                    <option value="2000">2000</option>
+                                    <option value="1999">1999</option>
+                                    <option value="1998">1998</option>
+                                    <option value="1997">1997</option>
+                                    <option value="1996">1996</option>
+                                    <option value="1995">1995</option>
+                                    <option value="1994">1994</option>
+                                    <option value="1993">1993</option>
+                                    <option value="1992">1992</option>
+                                    <option value="1991">1991</option>
+                                    <option value="1990">1990</option>
+                                    <option value="1989">1989</option>
+                                    <option value="1988">1988</option>
+                                    <option value="1987">1987</option>
+                                    <option value="1986">1986</option>
+                                    <option value="1985">1985</option>
+                                    <option value="1984">1984</option>
+                                    <option value="1983">1983</option>
+                                    <option value="1982">1982</option>
+                                    <option value="1981">1981</option>
+                                    <option value="1980">1980</option>
+                                    <option value="1979">1979</option>
+                                    <option value="1978">1978</option>
+                                    <option value="1977">1977</option>
+                                    <option value="1976">1976</option>
+                                    <option value="1975">1975</option>
+                                    <option value="1974">1974</option>
+                                    <option value="1973">1973</option>
+                                    <option value="1972">1972</option>
+                                    <option value="1971">1971</option>
+                                    <option value="1970">1970</option>
+                                    <option value="1969">1969</option>
+                                    <option value="1968">1968</option>
+                                    <option value="1967">1967</option>
+                                    <option value="1966">1966</option>
+                                    <option value="1965">1965</option>
+                                    <option value="1964">1964</option>
+                                    <option value="1963">1963</option>
+                                    <option value="1962">1962</option>
+                                    <option value="1961">1961</option>
+                                    <option value="1960">1960</option>
+                                    <option value="1959">1959</option>
+                                    <option value="1958">1958</option>
+                                    <option value="1957">1957</option>
+                                    <option value="1956">1956</option>
+                                    <option value="1955">1955</option>
+                                    <option value="1954">1954</option>
+                                    <option value="1953">1953</option>
+                                    <option value="1952">1952</option>
+                                    <option value="1951">1951</option>
+                                    <option value="1950">1950</option>
+                                    <option value="1949">1949</option>
+                                    <option value="1948">1948</option>
                                 </select>
                                 {errors.batch && <span className="field-error">{errors.batch}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label>Program *</label>
+                                <span><label>Program</label><label style={{color: 'red'}}> *</label></span>
                                 <select
                                     name="program"
                                     value={formData.program}
@@ -290,13 +341,13 @@ function Register() {
                                 value={formData.username}
                                 onChange={handleChange}
                                 className={errors.username ? 'error' : ''}
-                                placeholder="arisanakagawa"
+                                placeholder="macristina"
                             />
                             {errors.username && <span className="field-error">{errors.username}</span>}
                         </div>
 
                         <div className="form-group">
-                            <label>Password * (minimum 8 characters)</label>
+                            <span><label>Password</label><label style={{color: 'red'}}> * (minimum 8 characters)</label></span>
                             <div className="password-input-wrapper">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
@@ -316,7 +367,6 @@ function Register() {
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
-                                            <line x1="1" y1="1" x2="23" y2="23"></line>
                                         </svg>
                                     ) : (
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -346,66 +396,7 @@ function Register() {
                 </div>
             </main>
 
-            {/* Footer */}
-            <footer className="login-footer">
-                <div className="footer-content">
-                    <div className="footer-section footer-about">
-                        <div className="footer-logo-section">
-                            <img src="/addu-logo-white.png" alt="ADDU Logo" className="footer-logo" />
-                            <span className="footer-title">ATENEO ALUMNI</span>
-                        </div>
-                        <p className="footer-address">E. Jacinto Street, 8016, Davao City, Philippines</p>
-                    </div>
-
-                    <div className="footer-section footer-connect">
-                        <h3>Connect</h3>
-                        <div className="social-icons">
-                            <a href="#facebook" aria-label="Facebook">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
-                            </a>
-                            <a href="#linkedin" aria-label="LinkedIn">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
-                            </a>
-                            <a href="#youtube" aria-label="YouTube">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                </svg>
-                            </a>
-                            <a href="#instagram" aria-label="Instagram">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                                </svg>
-                            </a>
-                        </div>
-                        <div className="footer-links">
-                            <a href="#alumni-near-me">Alumni Near Me</a>
-                            <a href="#in-memoriam">In Memoriam</a>
-                            <a href="#directory">Directory</a>
-                        </div>
-                    </div>
-
-                    <div className="footer-section footer-engage">
-                        <h3>Engage</h3>
-                        <div className="footer-links">
-                            <a href="#programs">Programs</a>
-                            <a href="#partner">Partner</a>
-                            <a href="#give">Give</a>
-                        </div>
-                    </div>
-
-                    <div className="footer-section footer-events">
-                        <h3>Events</h3>
-                        <div className="footer-links">
-                            <a href="#events-calendar">Events Calendar</a>
-                            <a href="#travel">Travel</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }

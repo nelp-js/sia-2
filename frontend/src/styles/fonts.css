@@ -41,3 +41,24 @@
     font-style: normal;
     font-display: swap;
 }
+<<<<<<< HEAD
+=======
+
+/* Avenir LT Std 65 Medium - buttons, subheadings */
+@font-face {
+    font-family: 'Avenir LT Std';
+    src: url('/fonts/Avenir LT Std 65 Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Avenir LT Pro Roman - body/roman style */
+@font-face {
+    font-family: 'Avenir LT Pro Roman';
+    src: url('/fonts/AvenirLTProRoman.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+>>>>>>> dbb3805 (Initial commit: updated home page)
