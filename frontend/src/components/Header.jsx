@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import '../styles/Layout.css';
 
 function Header() {
@@ -7,11 +7,11 @@ function Header() {
             <div className="header-content">
                 <Link to="/" className="header-logo-section">
                     <img src="/addu-logo-white.png" alt="ADDU Logo" className="header-logo" />
-                    <span className="header-title">ATENEO ALUMNI</span>
+                    <span className="header-title">Ateneo Alumni</span>
                 </Link>
                 <nav className="header-nav">
                     <Link to="/">Home</Link>
-                    <a href="#events">Events</a>
+                    <Link to="/events">Events</Link>
                     <a href="#engage">Engage</a>
                     <a href="#support">Support</a>
                     <a href="#volunteer">Volunteer</a>

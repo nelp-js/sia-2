@@ -1,0 +1,369 @@
+/* Events Page */
+.events-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f7;
+}
+
+.events-main {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 48px 60px 80px;
+    box-sizing: border-box;
+}
+
+/* Hero section */
+.events-hero {
+    margin-bottom: 0; /* search bar uses negative margin to overlap */
+}
+
+.events-hero-image {
+    width: 100%;
+    height: 596px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    display: block;
+}
+
+/* ========== Search bar – 144px height, half overlapping hero (72px) ========== */
+.events-search-section {
+    margin-top: -72px;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+}
+
+.events-search-box {
+    background: #040354;
+    height: 144px;
+    border-radius: 20px;
+    padding: 0 24px 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.events-search-input {
+    flex: 1;
+    min-width: 0;
+    height: 56px;
+    background: #ececec;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 12px;
+    color: #10107b;
+    outline: none;
+}
+
+.events-search-input::placeholder {
+    color: #10107b;
+    opacity: 0.85;
+}
+
+.events-search-btn {
+    flex-shrink: 0;
+    width: 70px;
+    height: 70px;
+    background: #7848f4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.events-search-btn:hover {
+    opacity: 0.95;
+    transform: scale(1.02);
+}
+
+/* ========== Upcoming Events header ========== */
+.events-upcoming {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.events-section-title {
+    margin: 0;
+    font-family: 'Avenir LT Pro Light', sans-serif;
+    font-size: 36px;
+    font-weight: 300;
+}
+
+.events-title-upcoming {
+    color: #000000;
+}
+
+.events-title-events {
+    color: #7848f4;
+}
+
+.events-filters {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.events-filter-select {
+    width: 140px;
+    padding: 8px 16px;
+    background: #ececec;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 12px;
+    color: #10107b;
+    cursor: pointer;
+    outline: none;
+}
+
+/* ========== Event cards – 3 in a row, 20px gap, 400px height ========== */
+.events-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.events-card {
+    flex: 1;
+    min-width: 280px;
+    max-width: calc((100% - 40px) / 3);
+    background: #f5f5f5;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        0px -8px 80px rgba(0, 0, 0, 0.07),
+        0px -2.92px 29.201px rgba(0, 0, 0, 0.05),
+        0px -1.418px 14.177px rgba(0, 0, 0, 0.04),
+        0px -0.695px 6.95px rgba(0, 0, 0, 0.03),
+        0px -0.275px 2.748px rgba(0, 0, 0, 0.02);
+}
+
+.events-card-image-wrap {
+    flex-shrink: 0;
+    padding: 20px 20px 0;
+}
+
+.events-card-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 5px;
+    display: block;
+}
+
+.events-card-title {
+    font-family: Baskerville, 'Baskerville Old Face', Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #000000;
+    letter-spacing: -0.96px;
+    margin: 12px 20px 8px;
+    line-height: 1.25;
+}
+
+.events-card-date {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 14px;
+    color: #6155f5;
+    margin: 0 20px 4px;
+}
+
+.events-card:nth-child(3) .events-card-date {
+    font-size: 12px;
+    color: #7848f4;
+}
+
+.events-card-location {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 14px;
+    color: #7e7e7e;
+    margin: 0 20px 20px;
+}
+
+.events-card:nth-child(3) .events-card-location {
+    font-size: 12px;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1200px) {
+    .events-main {
+        padding: 40px 40px 60px;
+    }
+
+    .events-hero-image {
+        height: 480px;
+    }
+
+    .events-search-section {
+        margin-top: -60px;
+    }
+
+    .events-search-box {
+        height: 120px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .events-main {
+        padding: 32px 24px 48px;
+    }
+
+    .events-hero-image {
+        height: 400px;
+    }
+
+    .events-search-section {
+        margin-top: -56px;
+        margin-bottom: 40px;
+    }
+
+    .events-search-box {
+        height: 112px;
+        padding: 0 20px 0 24px;
+    }
+
+    .events-search-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .events-upcoming {
+        margin-bottom: 24px;
+    }
+
+    .events-section-title {
+        font-size: 30px;
+    }
+
+    .events-card {
+        max-width: calc((100% - 20px) / 2);
+    }
+}
+
+@media (max-width: 768px) {
+    .events-main {
+        padding: 24px 20px 40px;
+    }
+
+    .events-hero-image {
+        height: 320px;
+    }
+
+    .events-search-section {
+        margin-top: -48px;
+        margin-bottom: 32px;
+    }
+
+    .events-search-box {
+        height: 96px;
+        padding: 0 16px 0 20px;
+    }
+
+    .events-search-input {
+        height: 48px;
+        font-size: 12px;
+    }
+
+    .events-search-btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .events-search-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .events-upcoming {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .events-section-title {
+        font-size: 26px;
+    }
+
+    .events-filters {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .events-filter-select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .events-cards {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .events-card {
+        max-width: 100%;
+        min-width: 0;
+        height: auto;
+    }
+
+    .events-card-image {
+        height: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+    .events-main {
+        padding: 20px 16px 32px;
+    }
+
+    .events-hero-image {
+        height: 260px;
+    }
+
+    .events-search-section {
+        margin-top: -40px;
+        margin-bottom: 24px;
+    }
+
+    .events-search-box {
+        height: 88px;
+        padding: 0 12px 0 16px;
+    }
+
+    .events-search-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .events-section-title {
+        font-size: 22px;
+    }
+
+    .events-card-title {
+        font-size: 20px;
+    }
+
+    .events-card-date,
+    .events-card-location {
+        font-size: 12px;
+    }
+}

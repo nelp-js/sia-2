@@ -1,0 +1,317 @@
+/* Create Event Page */
+.create-event-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f7;
+}
+
+.create-event-main {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 48px 24px 64px;
+}
+
+/* Centered-ish container, similar to registration but skewed left */
+.create-event-container {
+    width: 984px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px 40px 36px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+}
+
+.create-event-title {
+    font-family: 'Trajan Pro', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #18191c;
+    line-height: 32px;
+    margin: 0 0 32px 0;
+}
+
+.create-event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.ce-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ce-label-large {
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #18191c;
+}
+
+.ce-label-small {
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #18191c;
+}
+
+.ce-required {
+    color: #e5322d;
+}
+
+.ce-input,
+.ce-textarea,
+.ce-select {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    padding: 12px 14px;
+    font-family: 'Avenir LT Pro Roman', 'Avenir LT Pro Light', system-ui, sans-serif;
+    font-size: 15px;
+    color: #18191c;
+    box-sizing: border-box;
+}
+
+.ce-input::placeholder,
+.ce-textarea::placeholder {
+    color: #9199a3;
+}
+
+.ce-textarea {
+    resize: vertical;
+    min-height: 108px;
+}
+
+.ce-textarea-small {
+    height: 108px;
+}
+
+.ce-textarea-large {
+    height: 412px;
+}
+
+/* File input */
+.ce-file-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
+}
+
+.ce-file-input input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.ce-file-placeholder {
+    color: #717171;
+    font-size: 16px;
+}
+
+.ce-file-icon {
+    color: #6c6969;
+}
+
+/* Toggle section */
+.ce-section {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.ce-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+
+.ce-toggle-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ce-toggle-title {
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #18191c;
+}
+
+.ce-toggle-description {
+    font-family: 'Avenir LT Pro Light Oblique', 'Avenir LT Pro Light', system-ui, sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    color: #6d7280;
+}
+
+.ce-toggle-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 36px;
+    height: 20px;
+}
+
+.ce-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ce-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #c6c6c6;
+    border-radius: 999px;
+    transition: background-color 0.2s;
+}
+
+.ce-toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    top: 3px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.ce-toggle-switch input:checked + .ce-toggle-slider {
+    background-color: #2563eb;
+}
+
+.ce-toggle-switch input:checked + .ce-toggle-slider::before {
+    transform: translateX(16px);
+}
+
+.ce-toggle-fields {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.ce-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.ce-field-half {
+    flex: 1;
+    min-width: 0;
+}
+
+.ce-organizers-row {
+    margin-top: 8px;
+}
+
+.ce-select-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.ce-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.ce-select-chevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #717171;
+}
+
+/* Actions */
+.ce-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.ce-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    border-radius: 4px;
+    border: none;
+    background-color: #040354;
+    color: #ffffff;
+    font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.ce-submit-btn:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+}
+
+.ce-submit-icon {
+    font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .create-event-container {
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .create-event-main {
+        padding: 32px 16px 40px;
+    }
+
+    .create-event-container {
+        padding: 28px 20px 24px;
+    }
+
+    .ce-toggle-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ce-row {
+        flex-direction: column;
+    }
+
+    .ce-actions {
+        justify-content: stretch;
+    }
+
+    .ce-submit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
