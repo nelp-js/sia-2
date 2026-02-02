@@ -4,5 +4,9 @@ pip install -r req.txt
 
 for backend
 source env/bin/activate
-python manage.py startapp api
-python manage.py runserver
+python3 manage.py startapp api
+python3 manage.py runserver
+
+for frontend
+npm i
+npm run dev
