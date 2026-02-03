@@ -1,5 +1,5 @@
 /* Avenir LT Pro Light - Default font for everything */
-* {
+body {
     font-family: 'Avenir LT Pro Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
