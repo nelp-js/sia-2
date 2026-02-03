@@ -25,7 +25,8 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
             "first_name": {"required": True},
-            "middle_name": {"required": True},
+            # FIX 1: Make middle name optional
+            "middle_name": {"required": False, "allow_blank": True},
             "last_name": {"required": True},
             "email": {"required": True},
             "phone_number": {"required": True},
@@ -51,7 +52,11 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('confirm_email', None)
         password = validated_data.pop('password')
+        
+        # FIX 2: Prevent Database Crash by setting default values manually
+        validated_data['is_approved'] = False 
         validated_data['is_active'] = False  # New registrations are pending until admin approves
+        
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()

@@ -4,38 +4,40 @@ from .models import User, Event
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    # This controls what you see in the main list
-    list_display = ('username', 'email', 'first_name', 'last_name', 'batch', 'program', 'is_staff')
+    # 1. VISIBLE COLUMNS: Added 'is_approved' here so you see it in the list
+    list_display = ('username', 'email', 'first_name', 'last_name', 'batch', 'is_approved', 'is_staff')
     
-    # This adds filters on the right sidebar
-    list_filter = ('batch', 'program', 'is_staff', 'is_superuser')
+    # 2. FILTERS: Added 'is_approved' so you can filter by "Pending" or "Approved"
+    list_filter = ('is_approved', 'batch', 'program', 'is_staff', 'is_superuser')
     
-    # This controls the "Edit User" page structure
+    # 3. EDIT PAGE: Added 'is_approved' to the form so you can check/uncheck it manually
     fieldsets = UserAdmin.fieldsets + (
-        ('Alumni Info', {'fields': ('batch', 'program', 'phone_number', 'valid_id')}),
+        ('Alumni Info', {'fields': ('batch', 'program', 'phone_number', 'valid_id', 'is_approved')}),
         ('Marriage Info', {'fields': ('is_married', 'maiden_name')}),
     )
     
-    # This allows you to search users by these fields
     search_fields = ('username', 'first_name', 'last_name', 'email', 'batch')
 
-# --- 2. Event Admin (Your existing code) ---
+    # OPTIONAL: Add an action to bulk-approve users like you did for events
+    actions = ['approve_users']
+
+    def approve_users(self, request, queryset):
+        queryset.update(is_approved=True)
+        self.message_user(request, "Selected users have been approved.")
+    
+    approve_users.short_description = "Approve Selected Users"
+
+
+# --- 2. Event Admin (This was already correct) ---
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    # 1. VISIBLE COLUMNS: 'organizer' shows the username here
     list_display = ('event_name', 'organizer', 'start_date', 'is_approved')
-    
-    # 2. FILTER SIDEBAR: Adds a sidebar to filter "By Organizer"
     list_filter = ('is_approved', 'start_date', 'organizer') 
-    
-    # 3. SEARCH BAR: Allows you to type a username or email to find their events
-    # Note: 'organizer__username' means "Search the username field OF the organizer"
     search_fields = ('event_name', 'organizer__username', 'organizer__email')
-
     actions = ['approve_events']
 
     def approve_events(self, request, queryset):
         queryset.update(is_approved=True)
         self.message_user(request, "Selected events have been approved.")
     
-    approve_events.short_description = "Event Approved"
+    approve_events.short_description = "Approve Selected Events"

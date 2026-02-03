@@ -31,7 +31,7 @@ class User(AbstractUser):
     program = models.CharField(max_length=2, choices=PROGRAM_CHOICES)
 
     # Admin approval: None = pending, True = approved, False = rejected
-    is_approved = models.BooleanField(null=True, blank=True, default=None)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
