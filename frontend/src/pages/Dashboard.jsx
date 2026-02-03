@@ -35,7 +35,7 @@ const MODULE_CARDS = [
         to: '/events',
         // Secondary Button for Event Creation
         secondaryButton: 'Create Event',
-        secondaryTo: '/events/create' 
+        secondaryTo: '/create-event' 
     },
     { 
         icon: 'briefcase', 
