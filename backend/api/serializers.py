@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, Event
+from .models import ActivityLog
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -65,9 +66,10 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data.pop('confirm_email', None)
         password = validated_data.pop('password')
         
-        # FIX 2: Prevent Database Crash by setting default values manually
         validated_data['is_approved'] = False 
-        validated_data['is_active'] = False  # New registrations are pending until admin approves
+        
+        # CHANGE THIS TO TRUE so they show up in the list!
+        validated_data['is_active'] = True  
         
         user = User.objects.create(**validated_data)
         user.set_password(password)
@@ -104,3 +106,15 @@ class EventSerializer(serializers.ModelSerializer):
             "action_button_label", "action_button_link"
         ]
         read_only_fields = ["is_approved", "organizer"]
+
+class ActivityLogSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField() # Shows username instead of ID
+    formatted_date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ActivityLog
+        fields = ['id', 'formatted_date', 'action', 'module', 'user', 'status']
+
+    def get_formatted_date(self, obj):
+        return obj.timestamp.strftime('%b %d, %Y %I:%M %p') # "Nov 10, 2025 10:30 AM"
+    

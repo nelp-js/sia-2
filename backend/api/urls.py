@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import ActivityLogListView
+
 
 urlpatterns = [
     path("user/me/", views.current_user, name="current-user"),
@@ -9,4 +11,5 @@ urlpatterns = [
     path("users/<int:user_id>/reject/", views.reject_user, name="reject-user"),
     path("events/", views.EventListCreate.as_view(), name="event-list"),
     path("events/delete/<int:pk>/", views.EventDelete.as_view(), name="delete-event"),
+    path('activities/', ActivityLogListView.as_view(), name='activity-list'),
 ]

@@ -62,3 +62,27 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event_name
+    
+    # backend/api/models.py
+
+class ActivityLog(models.Model):
+    MODULE_CHOICES = [
+        ('User Management', 'User Management'),
+        ('Event Management', 'Event Management'),
+        ('Job & Internship', 'Job & Internship'),
+        ('CMS & News Feed', 'CMS & News Feed'),
+        ('Fundraising', 'Fundraising'),
+        ('Feedback & Surveys', 'Feedback & Surveys'),
+    ]
+
+    action = models.CharField(max_length=255)  # e.g., "New user approved"
+    module = models.CharField(max_length=50, choices=MODULE_CHOICES)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) # Who did it?
+    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default='Completed') # e.g., "Success", "Pending"
+
+    class Meta:
+        ordering = ['-timestamp']  # Show newest first automatically
+
+    def __str__(self):
+        return f"{self.action} - {self.timestamp}"

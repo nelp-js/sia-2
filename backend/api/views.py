@@ -1,14 +1,16 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import User, Event
+
+from .models import User, Event, ActivityLog
 from .serializers import (
     UserSerializer, CurrentUserSerializer, UserListSerializer, UserUpdateSerializer,
-    EventSerializer, CustomTokenObtainPairSerializer,
+    EventSerializer, CustomTokenObtainPairSerializer, ActivityLogSerializer
 )
 
 # --- USER VIEWS ---
@@ -56,9 +58,20 @@ def approve_user(request, user_id):
         user = User.objects.get(pk=user_id, is_superuser=False)
     except User.DoesNotExist:
         return Response({"detail": "User not found."}, status=404)
+    
     user.is_approved = True
     user.is_active = True
     user.save()
+
+    # --- NEW: LOG ACTIVITY ---
+    ActivityLog.objects.create(
+        action=f"User approved: {user.username}",
+        module="User Management",
+        user=request.user,
+        status="Completed"
+    )
+    # -------------------------
+
     return Response({"detail": "User approved.", "is_approved": True, "is_active": True})
 
 
@@ -70,45 +83,52 @@ def reject_user(request, user_id):
         user = User.objects.get(pk=user_id, is_superuser=False)
     except User.DoesNotExist:
         return Response({"detail": "User not found."}, status=404)
+    
     user.is_approved = False
     user.is_active = False
     user.save()
+
+    # --- NEW: LOG ACTIVITY ---
+    ActivityLog.objects.create(
+        action=f"User rejected: {user.username}",
+        module="User Management",
+        user=request.user,
+        status="Rejected"
+    )
+    # -------------------------
+
     return Response({"detail": "User rejected.", "is_approved": False, "is_active": False})
 
 
 # --- EVENT VIEWS ---
 class EventListCreate(generics.ListCreateAPIView):
     serializer_class = EventSerializer
-    
-    # 2. CHANGE PERMISSION: Guests can Read (Get), Users can Write (Post)
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
-
-        # 3. HANDLE GUESTS (Anonymous Users)
-        # If we don't check this, the code crashes when trying to check "user.is_staff" or "organizer=user"
         if user.is_anonymous:
             return Event.objects.filter(is_approved=True)
-
-        # Logic: Admins see ALL events.
         if user.is_staff:
             return Event.objects.all()
-
-        # Regular users see Approved events + their own drafts
         return Event.objects.filter(is_approved=True) | Event.objects.filter(organizer=user)
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            # Automatically set the organizer to the current logged-in user
             serializer.save(organizer=self.request.user)
         else:
             print(serializer.errors)
+
 
 class EventDelete(generics.DestroyAPIView):
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Users can only delete their OWN events
         return Event.objects.filter(organizer=self.request.user)
+
+
+class ActivityLogListView(generics.ListAPIView):
+    queryset = ActivityLog.objects.all()[:10]
+    serializer_class = ActivityLogSerializer
+    permission_classes = [IsAuthenticated]
