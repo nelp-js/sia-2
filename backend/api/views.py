@@ -41,14 +41,29 @@ class UserListView(generics.ListAPIView):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def approve_user(request, user_id):
-    """Set user is_active=True so they can log in (admin only)."""
+    """Set user is_approved=True and is_active=True so they can log in (admin only)."""
     try:
         user = User.objects.get(pk=user_id, is_superuser=False)
     except User.DoesNotExist:
         return Response({"detail": "User not found."}, status=404)
+    user.is_approved = True
     user.is_active = True
     user.save()
-    return Response({"detail": "User approved.", "is_active": True})
+    return Response({"detail": "User approved.", "is_approved": True, "is_active": True})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def reject_user(request, user_id):
+    """Set user is_approved=False and is_active=False (admin only)."""
+    try:
+        user = User.objects.get(pk=user_id, is_superuser=False)
+    except User.DoesNotExist:
+        return Response({"detail": "User not found."}, status=404)
+    user.is_approved = False
+    user.is_active = False
+    user.save()
+    return Response({"detail": "User rejected.", "is_approved": False, "is_active": False})
 
 
 # --- EVENT VIEWS ---

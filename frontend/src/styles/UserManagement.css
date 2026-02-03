@@ -109,26 +109,54 @@
     color: #065f46;
 }
 
-.user-mgmt-approve-btn {
-    padding: 8px 16px;
-    background: #040354;
-    color: white;
-    border: none;
+.user-mgmt-status.rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.user-mgmt-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.user-mgmt-approve-btn,
+.user-mgmt-reject-btn {
+    padding: 10px 20px;
+    min-width: 100px;
+    background: transparent;
     border-radius: 8px;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.user-mgmt-approve-btn {
+    border: 1px solid #86efac;
+    color: #047857;
 }
 
 .user-mgmt-approve-btn:hover:not(:disabled) {
-    background: #050465;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(4, 3, 84, 0.3);
+    border-color: #4ade80;
+    color: #065f46;
 }
 
-.user-mgmt-approve-btn:disabled {
-    opacity: 0.7;
+.user-mgmt-reject-btn {
+    border: 1px solid #fca5a5;
+    color: #b91c1c;
+}
+
+.user-mgmt-reject-btn:hover:not(:disabled) {
+    border-color: #f87171;
+    color: #991b1b;
+}
+
+.user-mgmt-approve-btn:disabled,
+.user-mgmt-reject-btn:disabled {
+    opacity: 0.6;
     cursor: not-allowed;
 }
 

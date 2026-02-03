@@ -29,7 +29,10 @@ class User(AbstractUser):
     # 4. UPDATED MAX_LENGTH: Changed to 4 to hold "2025" safely
     batch = models.CharField(max_length=4, choices=BATCH_CHOICES)
     program = models.CharField(max_length=2, choices=PROGRAM_CHOICES)
-    
+
+    # Admin approval: None = pending, True = approved, False = rejected
+    is_approved = models.BooleanField(null=True, blank=True, default=None)
+
     def __str__(self):
         return self.username
 

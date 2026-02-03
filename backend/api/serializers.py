@@ -66,13 +66,12 @@ class CurrentUserSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    """Admin list of registered users with date_joined and status."""
-    date_joined = serializers.DateTimeField(format="%b %d, %Y %I:%M %p", read_only=True)
+    """Admin list of registered users with date_joined (ISO for local TZ) and is_approved."""
     class Meta:
         model = User
         fields = [
             "id", "username", "first_name", "middle_name", "last_name",
-            "email", "phone_number", "batch", "program", "date_joined", "is_active"
+            "email", "phone_number", "batch", "program", "date_joined", "is_active", "is_approved"
         ]
         read_only_fields = fields
 

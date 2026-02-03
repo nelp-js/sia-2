@@ -12,6 +12,7 @@ function UserManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [approvingId, setApprovingId] = useState(null);
+    const [rejectingId, setRejectingId] = useState(null);
 
     useEffect(() => {
         api.get('/api/users/')
@@ -25,18 +26,31 @@ function UserManagement() {
         api.post(`/api/users/${userId}/approve/`)
             .then(() => {
                 setUsers((prev) =>
-                    prev.map((u) => (u.id === userId ? { ...u, is_active: true } : u))
+                    prev.map((u) => (u.id === userId ? { ...u, is_approved: true, is_active: true } : u))
                 );
             })
             .catch(() => {})
             .finally(() => setApprovingId(null));
     };
 
+    const handleReject = (userId) => {
+        setRejectingId(userId);
+        api.post(`/api/users/${userId}/reject/`)
+            .then(() => {
+                setUsers((prev) =>
+                    prev.map((u) => (u.id === userId ? { ...u, is_approved: false, is_active: false } : u))
+                );
+            })
+            .catch(() => {})
+            .finally(() => setRejectingId(null));
+    };
+
+    // Format date in viewer's local timezone (backend sends ISO string)
     const formatDate = (dateStr) => {
         if (!dateStr) return '—';
         try {
             const d = new Date(dateStr);
-            return d.toLocaleString('en-US', {
+            return d.toLocaleString(undefined, {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
@@ -47,6 +61,14 @@ function UserManagement() {
             return dateStr;
         }
     };
+
+    const getStatus = (u) => {
+        if (u.is_approved === true) return 'Approved';
+        if (u.is_approved === false) return 'Rejected';
+        return 'Pending';
+    };
+
+    const isPending = (u) => u.is_approved == null;
 
     const fullName = (u) => {
         const parts = [u.first_name, u.middle_name, u.last_name].filter(Boolean);
@@ -93,20 +115,30 @@ function UserManagement() {
                                             <td>{u.program || '—'}</td>
                                             <td>{formatDate(u.date_joined)}</td>
                                             <td>
-                                                <span className={u.is_active ? 'user-mgmt-status approved' : 'user-mgmt-status pending'}>
-                                                    {u.is_active ? 'Approved' : 'Pending'}
+                                                <span className={`user-mgmt-status ${u.is_approved === true ? 'approved' : u.is_approved === false ? 'rejected' : 'pending'}`}>
+                                                    {getStatus(u)}
                                                 </span>
                                             </td>
                                             <td>
-                                                {!u.is_active && (
-                                                    <button
-                                                        type="button"
-                                                        className="user-mgmt-approve-btn"
-                                                        onClick={() => handleApprove(u.id)}
-                                                        disabled={approvingId === u.id}
-                                                    >
-                                                        {approvingId === u.id ? 'Approving...' : 'Approve'}
-                                                    </button>
+                                                {isPending(u) && (
+                                                    <span className="user-mgmt-actions">
+                                                        <button
+                                                            type="button"
+                                                            className="user-mgmt-approve-btn"
+                                                            onClick={() => handleApprove(u.id)}
+                                                            disabled={approvingId === u.id}
+                                                        >
+                                                            {approvingId === u.id ? 'Approving...' : 'Approve'}
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className="user-mgmt-reject-btn"
+                                                            onClick={() => handleReject(u.id)}
+                                                            disabled={rejectingId === u.id}
+                                                        >
+                                                            {rejectingId === u.id ? 'Rejecting...' : 'Reject'}
+                                                        </button>
+                                                    </span>
                                                 )}
                                             </td>
                                         </tr>

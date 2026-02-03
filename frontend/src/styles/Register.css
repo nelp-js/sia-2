@@ -53,6 +53,10 @@
     font-weight: 500;
 }
 
+.success-message p + p {
+    margin-top: 8px;
+}
+
 .error-message {
     background: #f8d7da;
     border: 1px solid #f5c6cb;
@@ -175,6 +179,7 @@
 /* Grid Layouts for Multiple Fields */
 .name-fields,
 .email-fields,
+.password-fields,
 .batch-program-fields {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -186,6 +191,7 @@
 }
 
 .email-fields,
+.password-fields,
 .batch-program-fields {
     grid-template-columns: repeat(2, 1fr);
 }
@@ -296,6 +302,7 @@
     }
 
     .email-fields,
+    .password-fields,
     .batch-program-fields {
         grid-template-columns: 1fr;
     }

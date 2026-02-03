@@ -23,6 +23,7 @@ function Register() {
         program: '',
         username: '',
         password: '',
+        confirm_password: '',
         valid_id: null 
     });
 
@@ -31,6 +32,7 @@ function Register() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     // 2. DYNAMIC BATCH GENERATION (1948 - Next Year)
     // This replaces all those hardcoded <option> tags
@@ -58,10 +60,19 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setErrors({});
 
-        // 3. USE FORMDATA (Required for File Uploads)
+        if (formData.email !== formData.confirm_email) {
+            setErrors({ confirm_email: 'Email and Confirm Email must match.' });
+            return;
+        }
+        if (formData.password !== formData.confirm_password) {
+            setErrors({ confirm_password: 'Password and Confirm Password must match.' });
+            return;
+        }
+
+        setLoading(true);
+
         const dataToSend = new FormData();
 
         dataToSend.append('first_name', formData.first_name);
@@ -101,12 +112,13 @@ function Register() {
                     first_name: '', middle_name: '', last_name: '',
                     is_married: false, maiden_name: '', email: '',
                     confirm_email: '', phone_number: '', batch: '',
-                    program: '', username: '', password: '', valid_id: null
+                    program: '', username: '', password: '', confirm_password: '', valid_id: null
                 });
                 setFileName("");
+                // Redirect to home after 6 seconds so user can read the message
                 setTimeout(() => {
-                    window.location.href = '/login';
-                }, 2000);
+                    window.location.href = '/';
+                }, 6000);
             } else {
                 setErrors(data);
             }
@@ -125,7 +137,8 @@ function Register() {
                 <div className="register-form">
                     {success && (
                         <div className="success-message">
-                            <p>✓ Registration successful! Redirecting to login...</p>
+                            <p>✓ Your registration request has been sent.</p>
+                            <p>Please wait for approval. You will be able to log in once an admin approves your account.</p>
                         </div>
                     )}
 
@@ -320,37 +333,74 @@ function Register() {
                             {errors.username && <span className="field-error">{errors.username}</span>}
                         </div>
 
-                        <div className="form-group">
-                            <span><label>Password</label><label style={{color: 'red'}}> * (minimum 8 characters)</label></span>
-                            <div className="password-input-wrapper">
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    className={errors.password ? 'error' : ''}
-                                    placeholder=""
-                                />
-                                <button
-                                    type="button"
-                                    className="password-toggle"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                >
-                                    {showPassword ? (
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                    ) : (
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                            <line x1="1" y1="1" x2="23" y2="23"></line>
-                                        </svg>
-                                    )}
-                                </button>
+                        <div className="password-fields">
+                            <div className="form-group">
+                                <span><label>Password</label><label style={{color: 'red'}}> * (minimum 8 characters)</label></span>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className={errors.password ? 'error' : ''}
+                                        placeholder=""
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showPassword ? (
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        ) : (
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                                {errors.password && <span className="field-error">{errors.password}</span>}
                             </div>
-                            {errors.password && <span className="field-error">{errors.password}</span>}
+
+                            <div className="form-group">
+                                <span><label>Confirm Password</label><label style={{color: 'red'}}> *</label></span>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        name="confirm_password"
+                                        value={formData.confirm_password}
+                                        onChange={handleChange}
+                                        className={errors.confirm_password ? 'error' : ''}
+                                        placeholder=""
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showConfirmPassword ? (
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        ) : (
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                                {errors.confirm_password && <span className="field-error">{errors.confirm_password}</span>}
+                            </div>
                         </div>
 
                         <div className="form-group">
