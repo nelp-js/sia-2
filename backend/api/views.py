@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User, Event
-from .serializers import UserSerializer, CurrentUserSerializer, EventSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserSerializer, CurrentUserSerializer, UserListSerializer, EventSerializer, CustomTokenObtainPairSerializer
 
 # --- USER VIEWS ---
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -27,6 +27,29 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
     parser_classes = (MultiPartParser, FormParser)
+
+
+class UserListView(generics.ListAPIView):
+    """List all registered users (admin only). Excludes superusers from list."""
+    serializer_class = UserListSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get_queryset(self):
+        return User.objects.filter(is_superuser=False).order_by("-date_joined")
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def approve_user(request, user_id):
+    """Set user is_active=True so they can log in (admin only)."""
+    try:
+        user = User.objects.get(pk=user_id, is_superuser=False)
+    except User.DoesNotExist:
+        return Response({"detail": "User not found."}, status=404)
+    user.is_active = True
+    user.save()
+    return Response({"detail": "User approved.", "is_active": True})
+
 
 # --- EVENT VIEWS ---
 class EventListCreate(generics.ListCreateAPIView):

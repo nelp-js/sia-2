@@ -6,6 +6,7 @@ import Home from "./pages/Home"
 import Events from "./pages/Events"
 import CreateEvent from "./pages/CreateEvent"
 import Dashboard from "./pages/Dashboard"
+import UserManagement from "./pages/UserManagement"
 import Error from "./pages/Error"
 import ProtectedRoute from "./components/ProtectedRoute"
 import AdminProtectedRoute from "./components/AdminProtectedRoute"
@@ -31,6 +32,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
         <Route path="/dashboard" element={<AdminProtectedRoute><Dashboard /></AdminProtectedRoute>} />
+        <Route path="/dashboard/users" element={<AdminProtectedRoute><UserManagement /></AdminProtectedRoute>} />
         {/* TEMPORARY: view dashboard UI without admin restriction - remove when auth is working */}
         <Route path="/dashboard-preview" element={<Dashboard />} />
         <Route path="*" element={<Error />}></Route>

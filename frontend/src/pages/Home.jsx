@@ -3,9 +3,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Home.css';
 import { useTitle } from '../Hooks/useTitle';
+import { ACCESS_TOKEN } from '../constants';
 
 function Home() {
     useTitle('Home');
+    const isLoggedIn = !!localStorage.getItem(ACCESS_TOKEN);
     const cards = [
         {
             image: '/cs alumni.jpg',
@@ -35,9 +37,11 @@ function Home() {
                     <p className="hero-message">
                         Empowered by Fortes in Fide, we strive to inspire, lead, and give back.
                     </p>
-                    <Link to="/login" className="hero-cta">
-                        Reconnect Today
-                    </Link>
+                    {!isLoggedIn && (
+                        <Link to="/login" className="hero-cta">
+                            Reconnect Today
+                        </Link>
+                    )}
                 </section>
 
                 {/* Full-width image */}

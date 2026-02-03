@@ -15,7 +15,7 @@ class User(AbstractUser):
     ]
     
     first_name = models.CharField(max_length=150)
-    middle_name = models.CharField(max_length=150)
+    middle_name = models.CharField(max_length=150, blank=True, null=True)
     last_name = models.CharField(max_length=150)
     is_married = models.BooleanField(default=False)
     maiden_name = models.CharField(max_length=150, blank=True, null=True)

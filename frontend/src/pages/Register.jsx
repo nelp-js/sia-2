@@ -70,6 +70,7 @@ function Register() {
         dataToSend.append('is_married', formData.is_married ? 'True' : 'False');
         if(formData.maiden_name) dataToSend.append('maiden_name', formData.maiden_name);
         dataToSend.append('email', formData.email);
+        dataToSend.append('confirm_email', formData.confirm_email);
         dataToSend.append('phone_number', formData.phone_number);
         dataToSend.append('batch', formData.batch);
         dataToSend.append('program', formData.program);
@@ -158,7 +159,7 @@ function Register() {
                                     onChange={handleChange}
                                     placeholder="Reyes"
                                 />
-                                {errors.middle_name && <span className="field-error">{errors.middle_name}</span>}
+                                
                             </div>
 
                             <div className="form-group">

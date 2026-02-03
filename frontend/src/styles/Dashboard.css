@@ -15,19 +15,20 @@
     box-sizing: border-box;
 }
 
+/* Same as Register/Create Event title - Avenir 65 for uniformity */
 .dashboard-title {
-    font-family: 'Trajan Pro', serif;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 400;
-    color: #040354;
+    color: #333;
     text-align: center;
     margin: 0 0 40px 0;
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
 }
 
-/* Summary stat cards */
+/* Summary stat cards - 3 columns to match design */
 .dashboard-stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-bottom: 48px;
 }
@@ -129,12 +130,12 @@
 }
 
 .dashboard-activities-title {
-    font-family: 'Trajan Pro', serif;
     font-size: 24px;
     font-weight: 400;
-    color: #040354;
+    color: #333;
     margin: 0 0 20px 0;
     text-align: left;
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
 }
 
 .dashboard-table-wrap {
