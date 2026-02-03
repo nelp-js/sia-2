@@ -17,7 +17,7 @@
 
 /* Hero section */
 .events-hero {
-    margin-bottom: 0; /* search bar uses negative margin to overlap */
+    margin-bottom: 0; 
 }
 
 .events-hero-image {
@@ -64,8 +64,10 @@
 }
 
 .events-search-input::placeholder {
-    color: #10107b;
-    opacity: 0.85;
+    font-size: 15px;
+    font-weight: 400;
+    color: #9199a3;
+    opacity: 1;
 }
 
 .events-search-btn {

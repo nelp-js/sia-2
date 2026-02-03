@@ -35,7 +35,7 @@ function Register() {
     // 2. DYNAMIC BATCH GENERATION (1948 - Next Year)
     // This replaces all those hardcoded <option> tags
     const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: (currentYear + 1) - 1948 + 1 }, (_, i) => (currentYear + 1) - i);
+    const years = Array.from({ length: (currentYear - 1) - 1948 + 1 }, (_, i) => (currentYear - 1) - i);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;

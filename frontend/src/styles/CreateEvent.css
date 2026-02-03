@@ -3,35 +3,38 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f5f5f7;
+    position: relative;
+    background-color: #F5F5F7;
 }
 
 .create-event-main {
     flex: 1;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 48px 24px 64px;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px 40px;
+    position: relative;
+    z-index: 1;
 }
 
-/* Centered-ish container, similar to registration but skewed left */
-.create-event-container {
-    width: 984px;
-    margin: 0 auto;
-    background: #ffffff;
+/* Form box: same as Register .register-form */
+.create-event-form-box {
+    background: white;
     border-radius: 12px;
-    padding: 40px 40px 36px;
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 900px;
     box-sizing: border-box;
 }
 
 .create-event-title {
-    font-family: 'Trajan Pro', serif;
     font-size: 28px;
-    font-weight: 500;
-    color: #18191c;
-    line-height: 32px;
-    margin: 0 0 32px 0;
+    font-weight: 400;
+    color: #333;
+    margin: 0 0 40px 0;
+    text-align: center;
+    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
 }
 
 .create-event-form {
@@ -47,17 +50,15 @@
 }
 
 .ce-label-large {
-    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
     font-size: 14px;
-    font-weight: 500;
-    color: #18191c;
+    font-weight: 400;
+    color: #333;
 }
 
 .ce-label-small {
-    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
     font-size: 14px;
-    font-weight: 500;
-    color: #18191c;
+    font-weight: 400;
+    color: #333;
 }
 
 .ce-required {
@@ -66,25 +67,48 @@
 
 .ce-input,
 .ce-textarea,
-.ce-select {
+.ce-select,
+.summary-ce-textarea {
     width: 100%;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     background-color: #ffffff;
-    padding: 12px 14px;
-    font-family: 'Avenir LT Pro Roman', 'Avenir LT Pro Light', system-ui, sans-serif;
+    padding: 12px 15px;
     font-size: 15px;
-    color: #18191c;
+    color: #333;
     box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 
-.ce-input::placeholder,
-.ce-textarea::placeholder {
+.ce-input:focus,
+.ce-textarea:focus,
+.ce-select:focus {
+    outline: none;
+    border-color: #040354;
+    box-shadow: 0 0 0 3px rgba(4, 3, 84, 0.1);
+}
+
+.ce-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.ce-char-count {
+    font-size: 12px;
+    font-weight: 400;
     color: #9199a3;
+    flex-shrink: 0;
 }
 
 .ce-textarea {
     resize: vertical;
+    min-height: 108px;
+}
+
+.summary-ce-textarea {
+    resize: none;
     min-height: 108px;
 }
 
@@ -106,10 +130,17 @@
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     background-color: #ffffff;
-    padding: 12px 14px;
+    padding: 12px 15px;
     box-sizing: border-box;
     cursor: pointer;
-    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
+    font-size: 15px;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.ce-file-input:hover {
+    border-color: #040354;
+    background: #f9f9f9;
 }
 
 .ce-file-input input[type="file"] {
@@ -120,8 +151,8 @@
 }
 
 .ce-file-placeholder {
-    color: #717171;
-    font-size: 16px;
+    color: #9199a3;
+    font-size: 15px;
 }
 
 .ce-file-icon {
@@ -149,10 +180,9 @@
 }
 
 .ce-toggle-title {
-    font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
     font-size: 14px;
-    font-weight: 500;
-    color: #18191c;
+    font-weight: 400;
+    color: #333;
 }
 
 .ce-toggle-description {
@@ -198,7 +228,7 @@
 }
 
 .ce-toggle-switch input:checked + .ce-toggle-slider {
-    background-color: #2563eb;
+    background-color: #040354;
 }
 
 .ce-toggle-switch input:checked + .ce-toggle-slider::before {
@@ -255,72 +285,73 @@
     gap: 16px;
 }
 
-/* New Cancel Button Style */
+/* Buttons: match Register .submit-btn and .upload-btn */
 .ce-cancel-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 16px 32px; /* Matches the submit button size */
-    border-radius: 4px;
-    
-    /* Secondary Button Styling */
-    border: 1px solid #e0e0e0; 
+    padding: 14px 40px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
     background-color: #ffffff;
-    color: #6d7280; /* Muted gray text */
-    
-    font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #333;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .ce-cancel-btn:hover {
-    background-color: #f5f5f7; /* Light gray hover */
-    color: #18191c; /* Darker text on hover */
-    border-color: #d1d5db;
+    border-color: #040354;
+    background-color: #f9f9f9;
 }
 
 .ce-submit-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 16px 32px;
-    border-radius: 4px;
+    padding: 14px 40px;
+    border-radius: 8px;
     border: none;
     background-color: #040354;
     color: #ffffff;
-    font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .ce-submit-btn:hover {
-    opacity: 0.95;
+    background: #050465;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(4, 3, 84, 0.3);
 }
 
 .ce-submit-icon {
     font-size: 18px;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .create-event-container {
-        width: 100%;
-        margin: 0 auto;
+/* Responsive: align with Register breakpoints */
+@media (max-width: 1024px) {
+    .create-event-form-box {
+        max-width: 800px;
     }
 }
 
 @media (max-width: 768px) {
     .create-event-main {
-        padding: 32px 16px 40px;
+        padding: 40px 15px 30px;
     }
 
-    .create-event-container {
-        padding: 28px 20px 24px;
+    .create-event-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .create-event-form-box {
+        padding: 40px 30px;
     }
 
     .ce-toggle-row {
@@ -336,9 +367,38 @@
         justify-content: stretch;
     }
 
-    .ce-submit-btn {
+    .ce-submit-btn,
+    .ce-cancel-btn {
         width: 100%;
         justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .create-event-main {
+        padding: 30px 10px 20px;
+    }
+
+    .create-event-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .create-event-form-box {
+        padding: 30px 20px;
+    }
+
+    .ce-input,
+    .ce-textarea,
+    .ce-select {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .ce-submit-btn,
+    .ce-cancel-btn {
+        padding: 12px;
+        font-size: 15px;
     }
 }
 

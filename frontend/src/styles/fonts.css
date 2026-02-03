@@ -85,3 +85,12 @@
     font-style: italic;
     font-display: swap;
 }
+
+/* Consistent placeholder styling across all forms */
+input::placeholder,
+textarea::placeholder {
+    font-size: 15px;
+    font-weight: 400;
+    color: #9199a3;
+    opacity: 1;
+}

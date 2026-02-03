@@ -1,12 +1,27 @@
 from django.shortcuts import render
 from rest_framework import generics
-# 1. ADD 'IsAuthenticatedOrReadOnly' HERE
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User, Event
-from .serializers import UserSerializer, EventSerializer
+from .serializers import UserSerializer, CurrentUserSerializer, EventSerializer, CustomTokenObtainPairSerializer
 
 # --- USER VIEWS ---
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """Login view that issues JWT with is_superuser claim."""
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    """Return current user id, username, is_superuser for frontend (e.g. dashboard link)."""
+    serializer = CurrentUserSerializer(request.user)
+    return Response(serializer.data)
+
+
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

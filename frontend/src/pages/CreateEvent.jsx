@@ -115,9 +115,8 @@ function CreateEvent() {
             <Header />
 
             <main className="create-event-main">
-                <section className="create-event-container">
-                    <h1 className="create-event-title">Create Event</h1>
-
+                <h1 className="create-event-title">Create Event</h1>
+                <div className="create-event-form-box">
                     <form className="create-event-form" onSubmit={handleSubmit}>
                         {/* Event Name */}
                         <div className="ce-field-group">
@@ -135,17 +134,21 @@ function CreateEvent() {
                             />
                         </div>
 
-                        {/* Preview Text - Mapping this to description temporarily or handle separately */}
+                        {/* Preview Text */}
                         <div className="ce-field-group">
-                            <label className="ce-label-large">
-                                Short Preview <span className="ce-required">*</span>
-                            </label>
+                            <div className="ce-label-row">
+                                <label className="ce-label-large">
+                                    Short Preview <span className="ce-required">*</span>
+                                </label>
+                                <span className="ce-char-count">{formData.previewText.length}/280</span>
+                            </div>
                             <textarea
                                 name="previewText"
                                 value={formData.previewText}
                                 onChange={handleChange}
-                                className="ce-textarea ce-textarea-small"
+                                className="summary-ce-textarea ce-textarea-small"
                                 placeholder="Short summary for the card view"
+                                maxLength={280}
                                 required
                             />
                         </div>
@@ -355,7 +358,7 @@ function CreateEvent() {
                             </button>
                         </div>
                     </form>
-                </section>
+                </div>
             </main>
 
             <Footer />

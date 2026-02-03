@@ -1,5 +1,15 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, Event
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Add is_superuser to JWT so frontend can show Dashboard without calling /api/user/me/."""
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["is_superuser"] = user.is_superuser
+        return token
 
 class UserSerializer(serializers.ModelSerializer):
     confirm_email = serializers.EmailField(write_only=True)
@@ -45,6 +55,14 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    """Minimal serializer for current user (dashboard / admin check)."""
+    class Meta:
+        model = User
+        fields = ["id", "username", "is_superuser"]
+        read_only_fields = ["id", "username", "is_superuser"]
+
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:

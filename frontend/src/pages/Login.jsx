@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN, USER_IS_ADMIN } from '../constants';
+import { jwtDecode } from 'jwt-decode';
+import api from '../api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useTitle } from '../Hooks/useTitle';
 
 function Login() {
     useTitle('Login');
+
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -30,51 +35,50 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 2. PREVENT 400 ERROR: Don't send request if empty
+        // Prevent empty submit
         if (!formData.username || !formData.password) {
-            setErrors({ general: "Username and password are required." });
+            setErrors({ general: 'Username and password are required.' });
             return;
         }
 
         setLoading(true);
         setErrors({});
 
-        //for local
-        // try {
-        //     const response = await fetch('http://127.0.0.1:8000/api/token/', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(formData)
-        //     });
-
         try {
-    const response = await fetch('https://sia-2.onrender.com/api/token/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    });
+            const response = await fetch('https://sia-2.onrender.com/api/token/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
 
             const data = await response.json();
 
             if (response.ok) {
-                // 3. FIX: Use the string constants defined above
                 localStorage.setItem(ACCESS_TOKEN, data.access);
                 localStorage.setItem(REFRESH_TOKEN, data.refresh);
-                
+
+                // Admin status: from JWT claim (backend adds is_superuser) or fallback to /api/user/me/
+                try {
+                    const decoded = jwtDecode(data.access);
+                    const isAdmin = Boolean(decoded.is_superuser);
+                    localStorage.setItem(USER_IS_ADMIN, isAdmin ? 'true' : 'false');
+                } catch {
+                    try {
+                        const me = await api.get('/api/user/me/');
+                        localStorage.setItem(USER_IS_ADMIN, me.data?.is_superuser ? 'true' : 'false');
+                    } catch {
+                        localStorage.setItem(USER_IS_ADMIN, 'false');
+                    }
+                }
+
                 navigate('/');
             } else {
-                // 5. DEBUG: This will print the specific 400 error to your browser console
-                console.log("Error details:", data); 
-                
-                // Handle "No active account" (401) vs "Bad Request" (400)
+                console.log('Error details:', data);
                 if (data.detail) {
                     setErrors({ general: data.detail });
                 } else {
-                    // This handles validation errors like { username: ["This field is required"] }
                     setErrors(data);
                 }
             }
@@ -89,20 +93,19 @@ function Login() {
         <div className="login-page">
             <Header />
 
-
-            {/* Main Content */}
             <main className="login-main">
-                <div className='login-container'>
+                <div className="login-container">
                     <div className="login-form">
                         <div className="form-logo-section">
-                            <img src="/addulogo.jpg" alt="ADDU Logo" className="form-logo" />
-
-
+                            <img
+                                src="/addulogo.jpg"
+                                alt="ADDU Logo"
+                                className="form-logo"
+                            />
                             <h1 className="form-brand-title">Ateneo Alumni</h1>
                         </div>
 
                         <h2>Sign In</h2>
-
 
                         {errors.general && (
                             <div className="error-message">
@@ -110,7 +113,7 @@ function Login() {
                             </div>
                         )}
 
-                        <div className="form-fields">
+                        <form className="form-fields" onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Username</label>
                                 <input
@@ -121,7 +124,9 @@ function Login() {
                                     className={errors.username ? 'error' : ''}
                                     placeholder="Enter your username"
                                 />
-                                {errors.username && <span className="field-error">{errors.username}</span>}
+                                {errors.username && (
+                                    <span className="field-error">{errors.username}</span>
+                                )}
                             </div>
 
                             <div className="form-group">
@@ -145,7 +150,6 @@ function Login() {
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>
-
                                             </svg>
                                         ) : (
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -155,11 +159,13 @@ function Login() {
                                         )}
                                     </button>
                                 </div>
-                                {errors.password && <span className="field-error">{errors.password}</span>}
+                                {errors.password && (
+                                    <span className="field-error">{errors.password}</span>
+                                )}
                             </div>
 
                             <button
-                                onClick={handleSubmit}
+                                type="submit"
                                 disabled={loading}
                                 className="submit-btn"
                             >
@@ -167,17 +173,19 @@ function Login() {
                             </button>
 
                             <div className="form-links">
-                                <a href="#forgot-password" className="forgot-password-link">Forgot Password?</a>
+                                <a href="#forgot-password" className="forgot-password-link">
+                                    Forgot Password?
+                                </a>
                                 <p className="register-link">
                                     Don't have an account? <a href="/register">Register here</a>
                                 </p>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </main>
-            <Footer />
 
+            <Footer />
         </div>
     );
 }
