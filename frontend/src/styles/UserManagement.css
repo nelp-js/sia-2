@@ -54,6 +54,8 @@
 
 .user-mgmt-table-wrap {
     overflow-x: auto;
+    max-height: 360px;
+    overflow-y: auto;
 }
 
 .user-mgmt-table {
@@ -64,6 +66,10 @@
 
 .user-mgmt-table thead {
     background: #f3f4f6;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 1px 0 0 #e5e7eb;
 }
 
 .user-mgmt-table th {
@@ -73,6 +79,7 @@
     color: #040354;
     font-size: 12px;
     letter-spacing: 0.5px;
+    background: #f3f4f6;
 }
 
 .user-mgmt-table tbody tr {
@@ -156,6 +163,155 @@
 
 .user-mgmt-approve-btn:disabled,
 .user-mgmt-reject-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.user-mgmt-edit-btn {
+    padding: 8px 16px;
+    background: #040354;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.user-mgmt-edit-btn:hover {
+    opacity: 0.9;
+}
+
+/* Edit modal */
+.user-mgmt-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.user-mgmt-modal {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 720px;
+    min-width: 320px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+.user-mgmt-modal-title {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.user-mgmt-modal-error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.user-mgmt-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.user-mgmt-modal-row {
+    display: flex;
+    gap: 14px;
+}
+
+.user-mgmt-modal-row .user-mgmt-modal-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-mgmt-modal-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.user-mgmt-modal-field input,
+.user-mgmt-modal-field select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.user-mgmt-modal-field input:focus,
+.user-mgmt-modal-field select:focus {
+    outline: none;
+    border-color: #040354;
+}
+
+.user-mgmt-modal-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.user-mgmt-modal-checkbox input[type="checkbox"] {
+    width: auto;
+}
+
+.user-mgmt-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.user-mgmt-modal-cancel {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #4b5563;
+}
+
+.user-mgmt-modal-cancel:hover {
+    background: #f3f4f6;
+}
+
+.user-mgmt-modal-save {
+    padding: 10px 20px;
+    background: #040354;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.user-mgmt-modal-save:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.user-mgmt-modal-save:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }

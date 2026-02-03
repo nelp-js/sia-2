@@ -105,8 +105,6 @@ function Login() {
                             <h1 className="form-brand-title">Ateneo Alumni</h1>
                         </div>
 
-                        <h2>Sign In</h2>
-
                         {errors.general && (
                             <div className="error-message">
                                 <p>{errors.general}</p>
@@ -115,14 +113,13 @@ function Login() {
 
                         <form className="form-fields" onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label>Username</label>
                                 <input
                                     type="text"
                                     name="username"
                                     value={formData.username}
                                     onChange={handleChange}
                                     className={errors.username ? 'error' : ''}
-                                    placeholder="Enter your username"
+                                    placeholder="Email or username"
                                 />
                                 {errors.username && (
                                     <span className="field-error">{errors.username}</span>
@@ -130,7 +127,6 @@ function Login() {
                             </div>
 
                             <div className="form-group">
-                                <label>Password</label>
                                 <div className="password-input-wrapper">
                                     <input
                                         type={showPassword ? 'text' : 'password'}
@@ -138,7 +134,7 @@ function Login() {
                                         value={formData.password}
                                         onChange={handleChange}
                                         className={errors.password ? 'error' : ''}
-                                        placeholder="Enter your password"
+                                        placeholder="Password"
                                     />
                                     <button
                                         type="button"
@@ -169,7 +165,7 @@ function Login() {
                                 disabled={loading}
                                 className="submit-btn"
                             >
-                                {loading ? 'Logging in...' : 'Sign In'}
+                                {loading ? 'Logging in...' : 'Log in'}
                             </button>
 
                             <div className="form-links">

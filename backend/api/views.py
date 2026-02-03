@@ -6,7 +6,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User, Event
-from .serializers import UserSerializer, CurrentUserSerializer, UserListSerializer, EventSerializer, CustomTokenObtainPairSerializer
+from .serializers import (
+    UserSerializer, CurrentUserSerializer, UserListSerializer, UserUpdateSerializer,
+    EventSerializer, CustomTokenObtainPairSerializer,
+)
 
 # --- USER VIEWS ---
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -36,6 +39,13 @@ class UserListView(generics.ListAPIView):
 
     def get_queryset(self):
         return User.objects.filter(is_superuser=False).order_by("-date_joined")
+
+
+class UserDetailView(generics.RetrieveUpdateAPIView):
+    """GET or PATCH a user by id (admin only). Used for edit form."""
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.all()
 
 
 @api_view(["POST"])

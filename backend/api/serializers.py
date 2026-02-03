@@ -3,6 +3,18 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, Event
 
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Admin edit: update user details and optionally set is_superuser / is_staff."""
+    class Meta:
+        model = User
+        fields = [
+            "id", "username", "first_name", "middle_name", "last_name",
+            "email", "phone_number", "batch", "program", "date_joined",
+            "is_active", "is_approved", "is_superuser", "is_staff"
+        ]
+        read_only_fields = ["id", "date_joined"]
+
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Add is_superuser to JWT so frontend can show Dashboard without calling /api/user/me/."""
     @classmethod
@@ -71,12 +83,13 @@ class CurrentUserSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
-    """Admin list of registered users with date_joined (ISO for local TZ) and is_approved."""
+    """Admin list of registered users with date_joined (ISO for local TZ), is_approved, is_superuser, is_staff."""
     class Meta:
         model = User
         fields = [
             "id", "username", "first_name", "middle_name", "last_name",
-            "email", "phone_number", "batch", "program", "date_joined", "is_active", "is_approved"
+            "email", "phone_number", "batch", "program", "date_joined",
+            "is_active", "is_approved", "is_superuser", "is_staff"
         ]
         read_only_fields = fields
 
