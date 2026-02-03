@@ -108,13 +108,9 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = ["is_approved", "organizer"]
 
 class ActivityLogSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField() # Shows username instead of ID
-    formatted_date = serializers.SerializerMethodField()
-
+    user = serializers.StringRelatedField()
+    
     class Meta:
         model = ActivityLog
-        fields = ['id', 'formatted_date', 'action', 'module', 'user', 'status']
-
-    def get_formatted_date(self, obj):
-        return obj.timestamp.strftime('%b %d, %Y %I:%M %p') # "Nov 10, 2025 10:30 AM"
+        fields = ['id', 'timestamp', 'action', 'module', 'user', 'status']
     

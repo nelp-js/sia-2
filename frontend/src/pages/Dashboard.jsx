@@ -11,18 +11,53 @@ import { useTitle } from '../Hooks/useTitle';
 
 const ICON_COLOR = '#040354';
 
-// Module Cards (Static)
+// Module Cards Configuration
 const MODULE_CARDS = [
-    { icon: 'users', title: 'User Management', description: 'Manage registration and accounts of users.', button: 'Manage Users', to: '/dashboard/users' },
-    { icon: 'document', title: 'CMS & News Feed', description: 'Manage website content, news articles, and information dissemination', button: 'Manage Content', to: '#' },
     { 
-        icon: 'calendar', title: 'Event Management', description: 'Create, manage, and track alumni events and attendance', 
-        button: 'Manage Events', to: '/events',
-        secondaryButton: 'Create Event', secondaryTo: '/events/create' 
+        icon: 'users', 
+        title: 'User Management', 
+        description: 'Manage registration and accounts of users.', 
+        button: 'Manage Users', 
+        to: '/dashboard/users' 
     },
-    { icon: 'briefcase', title: 'Job & Internship', description: 'Job postings, applications, and career tracking', button: 'Manage Jobs', to: '#' },
-    { icon: 'survey', title: 'Feedback & Surveys', description: 'Create surveys, collect feedback, and analyze tracer studies', button: 'Manage Surveys', to: '#' },
-    { icon: 'fundraising', title: 'Fundraising & Donations', description: 'Campaign management, donations, and financial support', button: 'Manage Campaigns', to: '#' },
+    { 
+        icon: 'document', 
+        title: 'CMS & News Feed', 
+        description: 'Manage website content, news articles, and information dissemination', 
+        button: 'Manage Content', 
+        to: '#' 
+    },
+    { 
+        icon: 'calendar', 
+        title: 'Event Management', 
+        description: 'Create, manage, and track alumni events and attendance', 
+        button: 'Manage Events', 
+        to: '/events',
+        // Secondary Button for Event Creation
+        secondaryButton: 'Create Event',
+        secondaryTo: '/events/create' 
+    },
+    { 
+        icon: 'briefcase', 
+        title: 'Job & Internship', 
+        description: 'Job postings, applications, and career tracking', 
+        button: 'Manage Jobs', 
+        to: '#' 
+    },
+    { 
+        icon: 'survey', 
+        title: 'Feedback & Surveys', 
+        description: 'Create surveys, collect feedback, and analyze tracer studies', 
+        button: 'Manage Surveys', 
+        to: '#' 
+    },
+    { 
+        icon: 'fundraising', 
+        title: 'Fundraising & Donations', 
+        description: 'Campaign management, donations, and financial support', 
+        button: 'Manage Campaigns', 
+        to: '#' 
+    },
 ];
 
 const STAT_ICON_MAP = {
@@ -56,18 +91,32 @@ function ModuleIcon({ type }) {
 function Dashboard() {
     useTitle('Admin Dashboard');
     
-    // Stats State
+    // --- STATE ---
     const [alumniCount, setAlumniCount] = useState(0); 
     const [statsLoading, setStatsLoading] = useState(true);
-
-    // Activities State
     const [activities, setActivities] = useState([]);
     const [activitiesLoading, setActivitiesLoading] = useState(true);
 
+    // --- HELPER: Format Date (Same as User Management) ---
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '—';
+        try {
+            const d = new Date(dateStr);
+            return d.toLocaleString(undefined, {
+                month: 'short', day: 'numeric', year: 'numeric',
+                hour: 'numeric', minute: '2-digit',
+            });
+        } catch {
+            return dateStr;
+        }
+    };
+
+    // --- FETCH DATA ---
     useEffect(() => {
         // 1. Fetch Alumni Count
         api.get('/api/users/')
             .then((res) => {
+                // Filter: Exclude Admins and Deleted Users (is_active=False)
                 const activeAlumni = res.data.filter(user => 
                     !user.is_superuser && user.is_active !== false
                 );
@@ -85,6 +134,7 @@ function Dashboard() {
             .finally(() => setActivitiesLoading(false));
     }, []);
 
+    // Dynamic Stats Cards
     const statCards = [
         { icon: 'people', value: statsLoading ? '...' : alumniCount.toLocaleString(), label: 'Total Alumni' },
         { icon: 'calendar', value: '24', label: 'Upcoming Events' },
@@ -97,7 +147,7 @@ function Dashboard() {
             <main className="dashboard-main">
                 <h1 className="dashboard-title">Admin Dashboard</h1>
 
-                {/* Stats Section */}
+                {/* STATS SECTION */}
                 <section className="dashboard-stats">
                     {statCards.map((card) => (
                         <div key={card.label} className="dashboard-stat-card">
@@ -108,7 +158,7 @@ function Dashboard() {
                     ))}
                 </section>
 
-                {/* Modules Section */}
+                {/* MODULES SECTION */}
                 <section className="dashboard-modules">
                     {MODULE_CARDS.map((card) => (
                         <div key={card.title} className="dashboard-module-card">
@@ -120,6 +170,8 @@ function Dashboard() {
                                 <Link to={card.to} className="dashboard-module-btn">
                                     {card.button}
                                 </Link>
+                                
+                                {/* Secondary Button (e.g. Create Event) */}
                                 {card.secondaryButton && (
                                     <Link to={card.secondaryTo} className="dashboard-module-btn secondary">
                                         {card.secondaryButton}
@@ -130,7 +182,7 @@ function Dashboard() {
                     ))}
                 </section>
 
-                {/* Recent Activities Section (Dynamic) */}
+                {/* RECENT ACTIVITIES SECTION */}
                 <section className="dashboard-activities">
                     <h2 className="dashboard-activities-title">Recent Activities</h2>
                     <div className="dashboard-table-wrap">
@@ -146,7 +198,8 @@ function Dashboard() {
                                 ) : (
                                     activities.map((row) => (
                                         <tr key={row.id}>
-                                            <td>{row.formatted_date}</td>
+                                            {/* Use formatDate on the raw timestamp */}
+                                            <td>{formatDate(row.timestamp)}</td>
                                             <td>{row.action}</td>
                                             <td>{row.module}</td>
                                             <td>{row.user}</td>
