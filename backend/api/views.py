@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import User, Event, ActivityLog
 from .serializers import (
     UserSerializer, CurrentUserSerializer, UserListSerializer, UserUpdateSerializer,
-    EventSerializer, CustomTokenObtainPairSerializer, ActivityLogSerializer
+    EventSerializer, EventUpdateSerializer, CustomTokenObtainPairSerializer, ActivityLogSerializer
 )
 
 # --- USER VIEWS ---
@@ -120,11 +120,58 @@ class EventListCreate(generics.ListCreateAPIView):
             print(serializer.errors)
 
 
+class EventDetailView(generics.RetrieveUpdateAPIView):
+    """GET or PATCH an event by id (admin only). Used for event management edit."""
+    serializer_class = EventUpdateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Event.objects.all()
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def approve_event(request, event_id):
+    """Set event is_approved=True (admin only)."""
+    try:
+        event = Event.objects.get(pk=event_id)
+    except Event.DoesNotExist:
+        return Response({"detail": "Event not found."}, status=404)
+    event.is_approved = True
+    event.save()
+    ActivityLog.objects.create(
+        action=f"Event approved: {event.event_name}",
+        module="Event Management",
+        user=request.user,
+        status="Completed"
+    )
+    return Response({"detail": "Event approved.", "is_approved": True})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def reject_event(request, event_id):
+    """Set event is_approved=False (admin only)."""
+    try:
+        event = Event.objects.get(pk=event_id)
+    except Event.DoesNotExist:
+        return Response({"detail": "Event not found."}, status=404)
+    event.is_approved = False
+    event.save()
+    ActivityLog.objects.create(
+        action=f"Event rejected: {event.event_name}",
+        module="Event Management",
+        user=request.user,
+        status="Rejected"
+    )
+    return Response({"detail": "Event rejected.", "is_approved": False})
+
+
 class EventDelete(generics.DestroyAPIView):
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        if self.request.user.is_staff:
+            return Event.objects.all()
         return Event.objects.filter(organizer=self.request.user)
 
 

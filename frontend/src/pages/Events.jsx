@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { events } from '../data/eventsData';
 import '../styles/Events.css';
 import { useTitle } from '../Hooks/useTitle';
 
@@ -10,30 +12,6 @@ function Events() {
     const [weekdays, setWeekdays] = useState('Weekdays');
     const [eventType, setEventType] = useState('Event type');
     const [category, setCategory] = useState('Any category');
-
-    const events = [
-        {
-            id: 1,
-            image: '/ateneo homecoming 3.jpg',
-            title: 'Alumni Career Fair & Networking Night',
-            date: 'October 13, 2025',
-            location: 'Finster Auditorium',
-        },
-        {
-            id: 2,
-            image: '/martinhall.jpg',
-            title: 'Alumni Sports Fest',
-            date: 'August 14, 2025',
-            location: 'Martin Hall, 4F',
-        },
-        {
-            id: 3,
-            image: '/ateneo homecoming 1.jpg',
-            title: 'Homecoming Gala 2025',
-            date: 'July 30, 2025',
-            location: 'SMX Convention, SM Lanang',
-        },
-    ];
 
     return (
         <div className="events-page">
@@ -107,21 +85,23 @@ function Events() {
                     </div>
                 </section>
 
-                {/* Event cards */}
+                {/* Event cards - link to event view */}
                 <section className="events-cards">
                     {events.map((event) => (
-                        <article key={event.id} className="events-card">
-                            <div className="events-card-image-wrap">
-                                <img
-                                    src={event.image}
-                                    alt=""
-                                    className="events-card-image"
-                                />
-                            </div>
-                            <h3 className="events-card-title">{event.title}</h3>
-                            <p className="events-card-date">{event.date}</p>
-                            <p className="events-card-location">{event.location}</p>
-                        </article>
+                        <Link key={event.id} to={`/events/${event.id}`} className="events-card-link">
+                            <article className="events-card">
+                                <div className="events-card-image-wrap">
+                                    <img
+                                        src={event.image}
+                                        alt=""
+                                        className="events-card-image"
+                                    />
+                                </div>
+                                <h3 className="events-card-title">{event.title}</h3>
+                                <p className="events-card-date">{event.date}</p>
+                                <p className="events-card-location">{event.location}</p>
+                            </article>
+                        </Link>
                     ))}
                 </section>
             </main>

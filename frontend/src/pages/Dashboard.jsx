@@ -32,8 +32,7 @@ const MODULE_CARDS = [
         title: 'Event Management', 
         description: 'Create, manage, and track alumni events and attendance', 
         button: 'Manage Events', 
-        to: '/events',
-        // Secondary Button for Event Creation
+        to: '/dashboard/events',
         secondaryButton: 'Create Event',
         secondaryTo: '/create-event' 
     },

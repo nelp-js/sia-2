@@ -4,12 +4,15 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Home from "./pages/Home"
 import Events from "./pages/Events"
+import EventView from "./pages/EventView"
 import CreateEvent from "./pages/CreateEvent"
 import Dashboard from "./pages/Dashboard"
 import UserManagement from "./pages/UserManagement"
+import EventManagement from "./pages/EventManagement"
 import Error from "./pages/Error"
 import ProtectedRoute from "./components/ProtectedRoute"
 import AdminProtectedRoute from "./components/AdminProtectedRoute"
+import ScrollToTop from "./components/ScrollToTop"
 
 function Logout() {
   localStorage.clear()
@@ -24,15 +27,18 @@ function RegisterAndLogout() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/events/:id" element={<EventView />} />
         <Route path="/create-event" element={<CreateEvent />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
         <Route path="/dashboard" element={<AdminProtectedRoute><Dashboard /></AdminProtectedRoute>} />
         <Route path="/dashboard/users" element={<AdminProtectedRoute><UserManagement /></AdminProtectedRoute>} />
+        <Route path="/dashboard/events" element={<AdminProtectedRoute><EventManagement /></AdminProtectedRoute>} />
         {/* TEMPORARY: view dashboard UI without admin restriction - remove when auth is working */}
         <Route path="/dashboard-preview" element={<Dashboard />} />
         <Route path="*" element={<Error />}></Route>

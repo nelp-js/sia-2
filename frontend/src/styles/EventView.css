@@ -1,0 +1,225 @@
+/* Event View - single event detail page (matches Event View frame) */
+.event-view-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f7;
+}
+
+.event-view-main {
+    flex: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 32px 24px 80px;
+    box-sizing: border-box;
+}
+
+.event-view-not-found {
+    color: #6d7280;
+    margin-bottom: 16px;
+}
+
+.event-view-all-events {
+    display: inline-block;
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 14px;
+    color: #040354;
+    text-decoration: none;
+    margin-bottom: 16px;
+}
+
+.event-view-all-events:hover {
+    text-decoration: underline;
+}
+
+.event-view-back-link {
+    font-size: 14px;
+    color: #040354;
+    text-decoration: underline;
+}
+
+.event-view-title {
+    font-family: Baskerville, 'Baskerville Old Face', Georgia, serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: -0.5px;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+}
+
+.event-view-date-time {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 16px;
+    color: #4b5563;
+    margin: 0 0 24px 0;
+}
+
+.event-view-banner-wrap {
+    width: 100%;
+    margin-bottom: 24px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.event-view-banner {
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.event-view-tagline {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #1f2937;
+    margin: 0 0 16px 0;
+}
+
+.event-view-description {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #374151;
+    margin: 0 0 16px 0;
+}
+
+.event-view-deadline {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 8px 0;
+}
+
+.event-view-date-repeat {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 15px;
+    color: #374151;
+    margin: 0 0 28px 0;
+}
+
+.event-view-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 48px;
+}
+
+.event-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    box-sizing: border-box;
+}
+
+.event-view-btn:hover {
+    opacity: 0.92;
+}
+
+.event-view-btn-calendar {
+    background: #fff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.event-view-btn-register {
+    background: #040354;
+    color: #fff;
+    border: none;
+}
+
+.event-view-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 32px;
+    padding-top: 32px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.event-view-info-col h3 {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    margin: 0 0 12px 0;
+}
+
+.event-view-info-col p {
+    font-family: 'Avenir Book', 'Avenir LT Pro Light', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #374151;
+    margin: 0 0 6px 0;
+}
+
+.event-view-info-col p:last-child {
+    margin-bottom: 0;
+}
+
+.event-view-share-icons {
+    display: flex;
+    gap: 14px;
+    margin-top: 8px;
+}
+
+.event-view-share-icons a {
+    color: #040354;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-view-share-icons a:hover {
+    opacity: 0.8;
+}
+
+.event-view-share-icons svg {
+    width: 22px;
+    height: 22px;
+}
+
+@media (max-width: 768px) {
+    .event-view-main {
+        padding: 24px 20px 60px;
+    }
+
+    .event-view-title {
+        font-size: 26px;
+    }
+
+    .event-view-actions {
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 40px;
+    }
+
+    .event-view-btn {
+        justify-content: center;
+    }
+
+    .event-view-info {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .event-view-info {
+        grid-template-columns: 1fr;
+    }
+}
