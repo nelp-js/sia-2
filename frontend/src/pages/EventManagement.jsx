@@ -24,6 +24,8 @@ function EventManagement() {
     const [editError, setEditError] = useState(null);
     const [savingEdit, setSavingEdit] = useState(false);
 
+    const [detailsEvent, setDetailsEvent] = useState(null);
+
     useEffect(() => {
         api.get('/api/events/')
             .then((res) => setEvents(res.data))
@@ -109,6 +111,9 @@ function EventManagement() {
         setEditError(null);
     };
 
+    const openDetails = (ev) => setDetailsEvent(ev);
+    const closeDetails = () => setDetailsEvent(null);
+
     const handleEditChange = (ev) => {
         const { name, value, type, checked } = ev.target;
         setEditForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
@@ -163,7 +168,7 @@ function EventManagement() {
                                         <th>EVENT NAME</th>
                                         <th>VENUE</th>
                                         <th>DATE</th>
-                                        <th>CATEGORY</th>
+                                        <th>DETAILS</th>
                                         <th>STATUS</th>
                                         <th>ACTION</th>
                                     </tr>
@@ -174,7 +179,11 @@ function EventManagement() {
                                             <td>{ev.event_name || '—'}</td>
                                             <td>{ev.venue || '—'}</td>
                                             <td>{formatDate(ev.start_date)} {formatTime(ev.start_time) ? ` at ${formatTime(ev.start_time)}` : ''}</td>
-                                            <td>{ev.category || '—'}</td>
+                                            <td>
+                                                <button type="button" className="event-mgmt-details-link" onClick={() => openDetails(ev)}>
+                                                    View Details
+                                                </button>
+                                            </td>
                                             <td>
                                                 <span className={`event-mgmt-status ${ev.is_approved ? 'approved' : 'pending'}`}>
                                                     {getStatus(ev)}
@@ -193,9 +202,6 @@ function EventManagement() {
                                                 ) : (
                                                     <span className="event-mgmt-actions">
                                                         <button type="button" className="event-mgmt-edit-btn" onClick={() => openEdit(ev)}>Edit</button>
-                                                        <button type="button" className="event-mgmt-delete-btn" onClick={() => handleDelete(ev.id)} disabled={deletingId === ev.id}>
-                                                            {deletingId === ev.id ? '...' : 'Delete'}
-                                                        </button>
                                                     </span>
                                                 )}
                                             </td>
@@ -211,6 +217,77 @@ function EventManagement() {
                     <Link to="/dashboard" className="event-mgmt-back-link">← Back to Dashboard</Link>
                     <Link to="/create-event" className="event-mgmt-back-link event-mgmt-create-link">Create Event</Link>
                 </div>
+
+                {/* Details (read-only) popup */}
+                {detailsEvent != null && (
+                    <div className="event-mgmt-modal-overlay" onClick={closeDetails}>
+                        <div className="event-mgmt-modal event-mgmt-details-modal" onClick={(e) => e.stopPropagation()}>
+                            <h2 className="event-mgmt-modal-title">Event Details</h2>
+                            <div className="event-mgmt-details-content">
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Event Name</span>
+                                    <span className="event-mgmt-details-value">{detailsEvent.event_name || '—'}</span>
+                                </div>
+                                <div className="event-mgmt-details-row event-mgmt-details-row-block">
+                                    <span className="event-mgmt-details-label">Description</span>
+                                    <span className="event-mgmt-details-value">{detailsEvent.event_description || '—'}</span>
+                                </div>
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Venue</span>
+                                    <span className="event-mgmt-details-value">{detailsEvent.venue || '—'}</span>
+                                </div>
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Start</span>
+                                    <span className="event-mgmt-details-value">
+                                        {formatDate(detailsEvent.start_date)}
+                                        {formatTime(detailsEvent.start_time) ? ` at ${formatTime(detailsEvent.start_time)}` : ''}
+                                    </span>
+                                </div>
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">End</span>
+                                    <span className="event-mgmt-details-value">
+                                        {detailsEvent.end_date ? formatDate(detailsEvent.end_date) : '—'}
+                                        {detailsEvent.end_time && formatTime(detailsEvent.end_time) ? ` at ${formatTime(detailsEvent.end_time)}` : ''}
+                                    </span>
+                                </div>
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Category</span>
+                                    <span className="event-mgmt-details-value">{detailsEvent.category || '—'}</span>
+                                </div>
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Cost</span>
+                                    <span className="event-mgmt-details-value">{detailsEvent.cost || '—'}</span>
+                                </div>
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Organizers</span>
+                                    <span className="event-mgmt-details-value">{detailsEvent.organizer_names || '—'}</span>
+                                </div>
+                                {(detailsEvent.action_button_label || detailsEvent.action_button_link) && (
+                                    <>
+                                        <div className="event-mgmt-details-row">
+                                            <span className="event-mgmt-details-label">Action button label</span>
+                                            <span className="event-mgmt-details-value">{detailsEvent.action_button_label || '—'}</span>
+                                        </div>
+                                        <div className="event-mgmt-details-row">
+                                            <span className="event-mgmt-details-label">Action button link</span>
+                                            <span className="event-mgmt-details-value">{detailsEvent.action_button_link || '—'}</span>
+                                        </div>
+                                    </>
+                                )}
+                                <div className="event-mgmt-details-row">
+                                    <span className="event-mgmt-details-label">Status</span>
+                                    <span className={`event-mgmt-status ${detailsEvent.is_approved ? 'approved' : 'pending'}`}>
+                                        {detailsEvent.is_approved ? 'Approved' : 'Pending'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="event-mgmt-modal-actions event-mgmt-details-actions">
+                                <div />
+                                <button type="button" className="event-mgmt-modal-cancel" onClick={closeDetails}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {editingEvent != null && (
                     <div className="event-mgmt-modal-overlay" onClick={closeEdit}>
