@@ -37,6 +37,25 @@
     font-family: 'Avenir LT Std', 'Avenir Medium', system-ui, sans-serif;
 }
 
+/* Success message - same style as Register */
+.ce-success-message {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.ce-success-message p {
+    color: #155724;
+    margin: 0 0 8px 0;
+    font-size: 15px;
+}
+
+.ce-success-message p:last-child {
+    margin-bottom: 0;
+}
+
 .create-event-form {
     display: flex;
     flex-direction: column;

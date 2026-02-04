@@ -91,7 +91,8 @@ function Dashboard() {
     useTitle('Admin Dashboard');
     
     // --- STATE ---
-    const [alumniCount, setAlumniCount] = useState(0); 
+    const [alumniCount, setAlumniCount] = useState(0);
+    const [eventsCount, setEventsCount] = useState(0);
     const [statsLoading, setStatsLoading] = useState(true);
     const [activities, setActivities] = useState([]);
     const [activitiesLoading, setActivitiesLoading] = useState(true);
@@ -112,23 +113,23 @@ function Dashboard() {
 
     // --- FETCH DATA ---
     useEffect(() => {
-        // 1. Fetch Alumni Count
-        api.get('/api/users/')
-            .then((res) => {
-                // Filter: Exclude Admins and Deleted Users (is_active=False)
-                const activeAlumni = res.data.filter(user => 
+        // 1. Fetch Alumni Count and Events Count in parallel
+        Promise.all([
+            api.get('/api/users/').then((res) => {
+                const activeAlumni = res.data.filter(user =>
                     !user.is_superuser && user.is_active !== false
                 );
                 setAlumniCount(activeAlumni.length);
-            })
-            .catch(err => console.error(err))
-            .finally(() => setStatsLoading(false));
+            }),
+            api.get('/api/events/').then((res) => {
+                const approved = (res.data || []).filter(e => e.is_approved === true);
+                setEventsCount(approved.length);
+            }),
+        ]).catch(err => console.error(err)).finally(() => setStatsLoading(false));
 
         // 2. Fetch Recent Activities
         api.get('/api/activities/')
-            .then((res) => {
-                setActivities(res.data);
-            })
+            .then((res) => setActivities(res.data))
             .catch(err => console.error("Failed to load activities", err))
             .finally(() => setActivitiesLoading(false));
     }, []);
@@ -136,7 +137,7 @@ function Dashboard() {
     // Dynamic Stats Cards
     const statCards = [
         { icon: 'people', value: statsLoading ? '...' : alumniCount.toLocaleString(), label: 'Total Alumni' },
-        { icon: 'calendar', value: '24', label: 'Upcoming Events' },
+        { icon: 'calendar', value: statsLoading ? '...' : eventsCount.toLocaleString(), label: 'Total Events' },
         { icon: 'briefcase', value: '156', label: 'Active Job Postings' },
     ];
 

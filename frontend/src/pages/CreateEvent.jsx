@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 function CreateEvent() {
     useTitle('Create Event');
     const navigate = useNavigate();
+    const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         eventName: '',
         previewText: '',
@@ -42,6 +44,7 @@ function CreateEvent() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         // 1. Prepare FormData for file upload
         const dataToSend = new FormData();
@@ -96,17 +99,24 @@ function CreateEvent() {
             });
 
             if (response.ok) {
-                alert('Event successfully created! It is pending approval.');
-                // Redirect or clear form here
-                window.location.href = '/home';
+                setSuccess(true);
+                setFormData({
+                    eventName: '', previewText: '', coverPhoto: null, description: '',
+                    actionButtonEnabled: false, actionButtonLabel: '', actionButtonLink: '',
+                    startDate: '', endDate: '', startTime: '', endTime: '',
+                    cost: '', venue: '', organizer1: '', organizer2: '', organizer3: '',
+                });
+                setTimeout(() => navigate('/dashboard'), 6000);
             } else {
-                const errorData = await response.json();
+                const errorData = await response.json().catch(() => ({}));
                 console.error("Error:", errorData);
                 alert('Failed to create event. Check console for details.');
             }
         } catch (error) {
             console.error('Network Error:', error);
             alert('Something went wrong.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -117,6 +127,12 @@ function CreateEvent() {
             <main className="create-event-main">
                 <h1 className="create-event-title">Create Event</h1>
                 <div className="create-event-form-box">
+                    {success && (
+                        <div className="ce-success-message">
+                            <p>✓ Your event has been created.</p>
+                            <p>It is pending approval. You can see it in Event Management and it will be visible to everyone once an admin approves it.</p>
+                        </div>
+                    )}
                     <form className="create-event-form" onSubmit={handleSubmit}>
                         {/* Event Name */}
                         <div className="ce-field-group">
@@ -353,8 +369,8 @@ function CreateEvent() {
                                 Cancel
                             </button>
 
-                            <button type="submit" className="ce-submit-btn">
-                                <span>Post Event</span>
+                            <button type="submit" className="ce-submit-btn" disabled={loading || success}>
+                                <span>{loading ? 'Posting...' : success ? 'Posted' : 'Post Event'}</span>
                             </button>
                         </div>
                     </form>
