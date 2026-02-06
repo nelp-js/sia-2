@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Checks location
 import '../styles/Login.css';
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER_IS_ADMIN } from '../constants';
 import { jwtDecode } from 'jwt-decode';
@@ -13,6 +13,9 @@ function Login() {
     useTitle('Login');
 
     const navigate = useNavigate();
+    const location = useLocation(); 
+ 
+    const from = location.state?.from?.pathname || "/";
 
     const [formData, setFormData] = useState({
         username: '',
@@ -21,19 +24,12 @@ function Login() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
-    // 2. Add State for the Modal
     const [showForgotModal, setShowForgotModal] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        if (errors[name]) {
-            setErrors(prev => ({ ...prev, [name]: '' }));
-        }
+        setFormData(prev => ({ ...prev, [name]: value }));
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
     };
 
     const handleSubmit = async (e) => {
@@ -50,9 +46,7 @@ function Login() {
         try {
             const response = await fetch('https://sia-2.onrender.com/api/token/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
 
@@ -75,7 +69,8 @@ function Login() {
                     }
                 }
 
-                navigate('/');
+                navigate(from, { replace: true }); 
+
             } else {
                 console.log('Error details:', data);
                 if (data.detail) {
@@ -94,16 +89,11 @@ function Login() {
     return (
         <div className="login-page">
             <Header />
-
             <main className="login-main">
                 <div className="login-container">
                     <div className="login-form">
                         <div className="form-logo-section">
-                            <img
-                                src="/addulogo.jpg"
-                                alt="ADDU Logo"
-                                className="form-logo"
-                            />
+                            <img src="/addulogo.jpg" alt="ADDU Logo" className="form-logo" />
                             <h1 className="form-brand-title">Ateneo Alumni</h1>
                         </div>
 
@@ -123,9 +113,6 @@ function Login() {
                                     className={errors.username ? 'error' : ''}
                                     placeholder="Email or username"
                                 />
-                                {errors.username && (
-                                    <span className="field-error">{errors.username}</span>
-                                )}
                             </div>
 
                             <div className="form-group">
@@ -157,21 +144,13 @@ function Login() {
                                         )}
                                     </button>
                                 </div>
-                                {errors.password && (
-                                    <span className="field-error">{errors.password}</span>
-                                )}
                             </div>
 
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="submit-btn"
-                            >
+                            <button type="submit" disabled={loading} className="submit-btn">
                                 {loading ? 'Logging in...' : 'Log in'}
                             </button>
 
                             <div className="form-links">
-                                {/* 3. Trigger Modal on Click */}
                                 <a 
                                     href="#" 
                                     className="forgot-password-link"
@@ -190,12 +169,10 @@ function Login() {
                     </div>
                 </div>
 
-                {/* 4. Render Modal if visible */}
                 {showForgotModal && (
                     <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />
                 )}
             </main>
-
             <Footer />
         </div>
     );
