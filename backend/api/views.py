@@ -185,29 +185,31 @@ class ActivityLogListView(generics.ListAPIView):
 
 # --- PASSWORD RESET VIEWS (NEW) ---
 
+# backend/api/views.py
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def request_password_reset(request):
-    email = request.data.get('email')
+    # 👇 CHANGE: Get username instead of email
+    username = request.data.get('username') 
     try:
-        user = User.objects.get(email=email)
-        # Generate 6-digit OTP
-        otp = str(random.randint(100000, 999999))
+        # 👇 CHANGE: Find user by username
+        user = User.objects.get(username=username) 
         
-        # Save OTP to database (Create or Update existing)
+        otp = str(random.randint(100000, 999999))
         PasswordReset.objects.update_or_create(user=user, defaults={'otp': otp})
         
-        # Send Email
+        # Send to the user's registered email
         send_mail(
             subject='Password Reset OTP - Ateneo Alumni',
             message=f'Your verification code is: {otp}',
             from_email=None, 
-            recipient_list=[email],
+            recipient_list=[user.email], # 👈 We use the email from the database
             fail_silently=False,
         )
-        return Response({"detail": "OTP sent to email."})
+        return Response({"detail": f"OTP sent to email associated with {username}."})
     except User.DoesNotExist:
-        return Response({"detail": "User with this email not found."}, status=404)
+        return Response({"detail": "Username not found."}, status=404)
     except Exception as e:
         return Response({"detail": str(e)}, status=500)
 
@@ -215,19 +217,20 @@ def request_password_reset(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def reset_password(request):
-    email = request.data.get('email')
+    # 👇 CHANGE: Accept username to identify user
+    username = request.data.get('username')
     otp = request.data.get('otp')
     new_password = request.data.get('password')
     
     try:
-        user = User.objects.get(email=email)
+        # 👇 CHANGE: Find user by username
+        user = User.objects.get(username=username)
         reset_entry = PasswordReset.objects.get(user=user)
         
-        # Verify OTP
         if reset_entry.otp == otp:
             user.set_password(new_password)
             user.save()
-            reset_entry.delete() # Delete OTP after use so it can't be reused
+            reset_entry.delete()
             return Response({"detail": "Password reset successful."})
         else:
             return Response({"detail": "Invalid OTP."}, status=400)

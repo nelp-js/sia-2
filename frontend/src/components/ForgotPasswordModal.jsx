@@ -1,24 +1,26 @@
 import { useState } from 'react';
 import api from '../api';
-import '../styles/EventManagement.css'; // Importing your CSS
+import '../styles/EventManagement.css';
 
 function ForgotPasswordModal({ onClose }) {
     const [step, setStep] = useState(1);
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [otp, setOtp] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleSendOTP = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
         try {
-            await api.post('/api/password-reset-request/', { email });
+            const res = await api.post('/api/password-reset-request/', { username });
             setStep(2);
+            setMessage(res.data.detail); // Show "OTP sent to..." message
         } catch (err) {
-            setError(err.response?.data?.detail || "Failed to send code.");
+            setError(err.response?.data?.detail || "Failed to find username.");
         } finally {
             setLoading(false);
         }
@@ -29,7 +31,8 @@ function ForgotPasswordModal({ onClose }) {
         setLoading(true);
         setError('');
         try {
-            await api.post('/api/password-reset-confirm/', { email, otp, password });
+            // 👇 CHANGED: Sending username for verification
+            await api.post('/api/password-reset-confirm/', { username, otp, password });
             alert("Password Changed! Please login.");
             onClose();
         } catch (err) {
@@ -44,27 +47,29 @@ function ForgotPasswordModal({ onClose }) {
             <div 
                 className="event-mgmt-modal" 
                 onClick={(e) => e.stopPropagation()} 
-                style={{ maxWidth: '400px' }} // Keep it compact
+                style={{ maxWidth: '400px' }}
             >
                 <h2 className="event-mgmt-modal-title">Reset Password</h2>
                 
                 {error && <div className="event-mgmt-modal-error">{error}</div>}
+                {message && <div style={{color:'green', marginBottom:'10px', fontSize:'0.9em'}}>{message}</div>}
 
                 <div className="event-mgmt-modal-form">
                     {step === 1 ? (
                         <form onSubmit={handleSendOTP} style={{display:'flex', flexDirection:'column', gap:'15px'}}>
                             <div className="event-mgmt-modal-field">
-                                <label>Email Address</label>
+                                {/* 👇 CHANGED: Label and Input for Username */}
+                                <label>Username</label>
                                 <input 
-                                    type="email" 
-                                    value={email} 
-                                    onChange={(e) => setEmail(e.target.value)} 
+                                    type="text" 
+                                    value={username} 
+                                    onChange={(e) => setUsername(e.target.value)} 
                                     required 
-                                    placeholder="Enter your registered email"
+                                    placeholder="Enter your username"
                                 />
                             </div>
                             <button type="submit" className="event-mgmt-modal-save" disabled={loading} style={{width:'100%'}}>
-                                {loading ? "Sending..." : "Send Verification Code"}
+                                {loading ? "Finding User..." : "Next"}
                             </button>
                         </form>
                     ) : (
@@ -76,7 +81,7 @@ function ForgotPasswordModal({ onClose }) {
                                     value={otp} 
                                     onChange={(e) => setOtp(e.target.value)} 
                                     required 
-                                    placeholder="Check your email/console"
+                                    placeholder="Check your email"
                                 />
                             </div>
                             <div className="event-mgmt-modal-field">
@@ -97,7 +102,7 @@ function ForgotPasswordModal({ onClose }) {
                 </div>
 
                 <div className="event-mgmt-modal-actions">
-                    <div /> {/* Spacer to push Cancel to right */}
+                    <div />
                     <button type="button" className="event-mgmt-modal-cancel" onClick={onClose}>
                         Cancel
                     </button>
