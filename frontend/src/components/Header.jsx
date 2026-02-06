@@ -42,9 +42,9 @@ function Header() {
 
     const handleProfileClick = () => {
         if (!user) {
-            navigate('/login'); // Not logged in? Go to Login.
+            navigate('/login');
         } else {
-            setShowDropdown(!showDropdown); // Logged in? Toggle Dropdown.
+            setShowDropdown(!showDropdown);
         }
     };
 
@@ -69,7 +69,6 @@ function Header() {
                         </NavLink>
                     )}
 
-                    {/* --- SMART PROFILE SECTION --- */}
                     <div className="profile-container">
                         <button 
                             className="profile-btn header-nav-link" 
@@ -79,13 +78,17 @@ function Header() {
                             {user && <FiChevronDown style={{ fontSize: '1.1em' }} />}
                         </button>
 
-                        {/* Dropdown (Only visible if logged in & toggled) */}
                         {showDropdown && user && (
                             <div className="profile-dropdown">
                                 <div className="dropdown-info">
-                                    <div className="user-fullname">
+                                    {/* 👇 UPDATED SECTION: Added style for capitalization */}
+                                    <div 
+                                        className="user-fullname"
+                                        style={{ textTransform: 'capitalize' }}
+                                    >
                                         {user.first_name} {user.last_name}
                                     </div>
+                                    
                                     <div className="user-email">
                                         {user.email}
                                     </div>
