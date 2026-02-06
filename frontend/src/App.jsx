@@ -10,9 +10,9 @@ import Dashboard from "./pages/Dashboard"
 import UserManagement from "./pages/UserManagement"
 import EventManagement from "./pages/EventManagement"
 import Error from "./pages/Error"
-import ProtectedRoute from "./components/ProtectedRoute"
 import AdminProtectedRoute from "./components/AdminProtectedRoute"
 import ScrollToTop from "./components/ScrollToTop"
+import AutoLogout from "./components/AutoLogout" // <--- You already imported it here
 
 function Logout() {
   localStorage.clear()
@@ -28,6 +28,11 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      
+      {/* ADD THIS LINE HERE 👇 */}
+      <AutoLogout /> 
+      {/* This now watches for inactivity on EVERY page */}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
@@ -39,7 +44,6 @@ function App() {
         <Route path="/dashboard" element={<AdminProtectedRoute><Dashboard /></AdminProtectedRoute>} />
         <Route path="/dashboard/users" element={<AdminProtectedRoute><UserManagement /></AdminProtectedRoute>} />
         <Route path="/dashboard/events" element={<AdminProtectedRoute><EventManagement /></AdminProtectedRoute>} />
-        {/* TEMPORARY: view dashboard UI without admin restriction - remove when auth is working */}
         <Route path="/dashboard-preview" element={<Dashboard />} />
         <Route path="*" element={<Error />}></Route>
       </Routes>

@@ -77,11 +77,10 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class CurrentUserSerializer(serializers.ModelSerializer):
-    """Minimal serializer for current user (dashboard / admin check)."""
     class Meta:
         model = User
-        fields = ["id", "username", "is_superuser"]
-        read_only_fields = ["id", "username", "is_superuser"]
+        fields = ["id", "username", "is_superuser", "first_name", "last_name", "email"]
+        read_only_fields = ["id", "username", "is_superuser", "first_name", "last_name", "email"]
 
 
 class UserListSerializer(serializers.ModelSerializer):

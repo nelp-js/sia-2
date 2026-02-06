@@ -1,31 +1,52 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import '../styles/Layout.css';
 import { ACCESS_TOKEN, USER_IS_ADMIN } from '../constants';
 import api from '../api';
+import { FiInfo, FiLogOut, FiChevronDown } from 'react-icons/fi';
 
 function Header() {
     const [isAdmin, setIsAdmin] = useState(false);
+    const [user, setUser] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
             setIsAdmin(false);
+            setUser(null);
             return;
         }
-        const cached = localStorage.getItem(USER_IS_ADMIN);
-        if (cached === 'true') {
-            setIsAdmin(true);
-            return;
-        }
+
         api.get('/api/user/me/')
             .then((res) => {
-                const admin = Boolean(res.data?.is_superuser);
-                setIsAdmin(admin);
-                localStorage.setItem(USER_IS_ADMIN, admin ? 'true' : 'false');
+                const userData = res.data;
+                setUser(userData);
+                
+                const adminStatus = Boolean(userData?.is_superuser);
+                setIsAdmin(adminStatus);
+                localStorage.setItem(USER_IS_ADMIN, adminStatus ? 'true' : 'false');
             })
-            .catch(() => setIsAdmin(false));
+            .catch(() => {
+                setIsAdmin(false);
+                setUser(null);
+            });
     }, []);
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
+        window.location.reload(); 
+    };
+
+    const handleProfileClick = () => {
+        if (!user) {
+            navigate('/login'); // Not logged in? Go to Login.
+        } else {
+            setShowDropdown(!showDropdown); // Logged in? Toggle Dropdown.
+        }
+    };
 
     return (
         <header className="site-header">
@@ -34,18 +55,53 @@ function Header() {
                     <img src="/addu-logo-white.png" alt="ADDU Logo" className="header-logo" />
                     <span className="header-title">Ateneo Alumni</span>
                 </Link>
+                
                 <nav className="header-nav">
                     <Link to="/">Home</Link>
                     <Link to="/events">Events</Link>
                     <a href="#engage">Engage</a>
                     <a href="#support">Support</a>
                     <a href="#volunteer">Volunteer</a>
-                    <a href="#profile">Profile</a>
+
                     {isAdmin && (
                         <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'header-nav-link active' : 'header-nav-link'}>
                             Dashboard
                         </NavLink>
                     )}
+
+                    {/* --- SMART PROFILE SECTION --- */}
+                    <div className="profile-container">
+                        <button 
+                            className="profile-btn header-nav-link" 
+                            onClick={handleProfileClick}
+                        >
+                            Profile 
+                            {user && <FiChevronDown style={{ fontSize: '1.1em' }} />}
+                        </button>
+
+                        {/* Dropdown (Only visible if logged in & toggled) */}
+                        {showDropdown && user && (
+                            <div className="profile-dropdown">
+                                <div className="dropdown-info">
+                                    <div className="user-fullname">
+                                        {user.first_name} {user.last_name}
+                                    </div>
+                                    <div className="user-email">
+                                        {user.email}
+                                    </div>
+                                    <div className="user-username">
+                                        <FiInfo className="info-icon" /> {user.username}
+                                    </div>
+                                </div>
+
+                                <div className="dropdown-divider"></div>
+
+                                <button onClick={handleLogout} className="dropdown-logout">
+                                    <FiLogOut className="logout-icon" /> Log out
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </nav>
             </div>
         </header>
