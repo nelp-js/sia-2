@@ -352,7 +352,7 @@ function Register() {
                             </div>
 
                             <div className="form-group">
-                                <label>Username *</label>
+                                <span><label>Username </label><label style={{color: 'red'}}> *</label></span>
                                 <input
                                     type="text"
                                     name="username"
@@ -365,7 +365,7 @@ function Register() {
 
                             <div className="password-fields">
                                 <div className="form-group">
-                                    <label>Password *</label>
+                                    <span><label>Password </label><label style={{color: 'red'}}> *</label></span>
                                     <input
                                         type={showPassword ? 'text' : 'password'}
                                         name="password"
@@ -375,7 +375,7 @@ function Register() {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Confirm Password *</label>
+                                    <span><label>Confirm Password </label><label style={{color: 'red'}}> *</label></span>
                                     <input
                                         type={showConfirmPassword ? 'text' : 'password'}
                                         name="confirm_password"
