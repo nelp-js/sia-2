@@ -6,7 +6,7 @@ function Footer() {
             <div className="footer-content">
                 <div className="footer-section footer-about">
                     <div className="footer-logo-section">
-                        <img src="https://res.cloudinary.com/addualumni/image/upload/f_auto,q_auto/v1/addu-logo-white.png" alt="ADDU Logo" className="footer-logo" />
+                        <img src="https://res.cloudinary.com/dwi7oftcs/image/upload/v1770416948/addu-logo-white_y2yroy.png" alt="ADDU Logo" className="footer-logo" />
                         <span className="footer-title">ATENEO ALUMNI</span>
                     </div>
                     <p className="footer-address">E. Jacinto Street, 8016, Davao City, Philippines</p>
