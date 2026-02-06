@@ -6,7 +6,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 import random
 from django.core.mail import send_mail
 
@@ -184,8 +183,6 @@ class ActivityLogListView(generics.ListAPIView):
 
 
 # --- PASSWORD RESET VIEWS (NEW) ---
-
-# backend/api/views.py
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

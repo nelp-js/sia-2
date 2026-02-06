@@ -24,6 +24,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["is_superuser"] = user.is_superuser
         return token
 
+
 class UserSerializer(serializers.ModelSerializer):
     confirm_email = serializers.EmailField(write_only=True)
     
@@ -38,7 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
             "first_name": {"required": True},
-            # FIX 1: Make middle name optional
             "middle_name": {"required": False, "allow_blank": True},
             "last_name": {"required": True},
             "email": {"required": True},
@@ -67,14 +67,13 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         
         validated_data['is_approved'] = False 
-        
-        # CHANGE THIS TO TRUE so they show up in the list!
         validated_data['is_active'] = True  
         
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()
         return user
+
 
 class CurrentUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,9 +98,10 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            "id", "event_name", "event_description", "start_date", "end_date",
-            "start_time", "end_time", "venue", "category", "is_approved", 
-            "organizer", "event_image", "cost", "organizer_names", 
+            "id", "event_name", "preview_text", "event_description", # 👈 ADDED preview_text
+            "start_date", "end_date", "start_time", "end_time", 
+            "venue", "category", "is_approved", "organizer", 
+            "event_image", "cost", "organizer_names", 
             "action_button_label", "action_button_link"
         ]
         read_only_fields = ["is_approved", "organizer"]
@@ -112,12 +112,14 @@ class EventUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            "id", "event_name", "event_description", "start_date", "end_date",
-            "start_time", "end_time", "venue", "category", "is_approved",
-            "organizer", "event_image", "cost", "organizer_names",
+            "id", "event_name", "preview_text", "event_description", # 👈 ADDED preview_text
+            "start_date", "end_date", "start_time", "end_time", 
+            "venue", "category", "is_approved", "organizer", 
+            "event_image", "cost", "organizer_names",
             "action_button_label", "action_button_link"
         ]
         read_only_fields = ["organizer"]
+
 
 class ActivityLogSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
@@ -125,4 +127,3 @@ class ActivityLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityLog
         fields = ['id', 'timestamp', 'action', 'module', 'user', 'status']
-    

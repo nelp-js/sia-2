@@ -17,6 +17,7 @@ class User(AbstractUser):
     is_married = models.BooleanField(default=False)
     maiden_name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(unique=True)
+    id_type = models.CharField(max_length=50, blank=True, null=True)
     
     # 3. VERIFY THIS EXISTS: This looks correct for your file upload!
     valid_id = models.ImageField(upload_to='valid_ids/', blank=True, null=True)
@@ -36,6 +37,7 @@ class User(AbstractUser):
 class Event(models.Model):
     # Existing fields
     event_name = models.CharField(max_length=200)
+    preview_text = models.CharField(max_length=280, default="")
     event_description = models.TextField()
     start_date = models.DateField()
     start_time = models.TimeField()
