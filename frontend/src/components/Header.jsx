@@ -52,7 +52,7 @@ function Header() {
         <header className="site-header">
             <div className="header-content">
                 <Link to="/" className="header-logo-section">
-                    <img src="/addu-logo-white.png" alt="ADDU Logo" className="header-logo" />
+                    <img src="https://res.cloudinary.com/addualumni/image/upload/f_auto,q_auto/v1/addu-logo-white.png" alt="ADDU Logo" className="header-logo" />
                     <span className="header-title">Ateneo Alumni</span>
                 </Link>
                 

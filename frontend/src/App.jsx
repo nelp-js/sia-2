@@ -12,8 +12,7 @@ import EventManagement from "./pages/EventManagement"
 import Error from "./pages/Error"
 import AdminProtectedRoute from "./components/AdminProtectedRoute"
 import ScrollToTop from "./components/ScrollToTop"
-import AutoLogout from "./components/AutoLogout" // <--- You already imported it here
-
+import AutoLogout from "./components/AutoLogout"
 function Logout() {
   localStorage.clear()
   return <Navigate to="/login" />
@@ -29,9 +28,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       
-      {/* ADD THIS LINE HERE 👇 */}
       <AutoLogout /> 
-      {/* This now watches for inactivity on EVERY page */}
 
       <Routes>
         <Route path="/" element={<Home />} />
