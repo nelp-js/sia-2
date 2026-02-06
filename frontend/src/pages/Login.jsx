@@ -7,7 +7,6 @@ import api from '../api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useTitle } from '../Hooks/useTitle';
-// 1. Import the Modal
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
 
 function Login() {
