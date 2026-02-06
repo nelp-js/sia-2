@@ -15,4 +15,6 @@ urlpatterns = [
     path("events/<int:event_id>/reject/", views.reject_event, name="reject-event"),
     path("events/delete/<int:pk>/", views.EventDelete.as_view(), name="delete-event"),
     path('activities/', ActivityLogListView.as_view(), name='activity-list'),
+    path("password-reset-request/", views.request_password_reset, name="password-reset-request"),
+    path("password-reset-confirm/", views.reset_password, name="password-reset-confirm"),
 ]

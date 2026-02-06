@@ -7,6 +7,8 @@ import api from '../api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useTitle } from '../Hooks/useTitle';
+// 1. Import the Modal
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
 
 function Login() {
     useTitle('Login');
@@ -20,6 +22,9 @@ function Login() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    // 2. Add State for the Modal
+    const [showForgotModal, setShowForgotModal] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -35,7 +40,6 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Prevent empty submit
         if (!formData.username || !formData.password) {
             setErrors({ general: 'Username and password are required.' });
             return;
@@ -59,7 +63,6 @@ function Login() {
                 localStorage.setItem(ACCESS_TOKEN, data.access);
                 localStorage.setItem(REFRESH_TOKEN, data.refresh);
 
-                // Admin status: from JWT claim (backend adds is_superuser) or fallback to /api/user/me/
                 try {
                     const decoded = jwtDecode(data.access);
                     const isAdmin = Boolean(decoded.is_superuser);
@@ -169,7 +172,15 @@ function Login() {
                             </button>
 
                             <div className="form-links">
-                                <a href="#forgot-password" className="forgot-password-link">
+                                {/* 3. Trigger Modal on Click */}
+                                <a 
+                                    href="#" 
+                                    className="forgot-password-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setShowForgotModal(true);
+                                    }}
+                                >
                                     Forgot Password?
                                 </a>
                                 <p className="register-link">
@@ -179,11 +190,16 @@ function Login() {
                         </form>
                     </div>
                 </div>
+
+                {/* 4. Render Modal if visible */}
+                {showForgotModal && (
+                    <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />
+                )}
             </main>
 
             <Footer />
         </div>
     );
 }
-// haha
+
 export default Login;

@@ -81,7 +81,6 @@ function Header() {
                         {showDropdown && user && (
                             <div className="profile-dropdown">
                                 <div className="dropdown-info">
-                                    {/* 👇 UPDATED SECTION: Added style for capitalization */}
                                     <div 
                                         className="user-fullname"
                                         style={{ textTransform: 'capitalize' }}

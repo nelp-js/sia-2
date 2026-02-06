@@ -3,11 +3,8 @@ from django.contrib.auth.models import AbstractUser
 import datetime
 
 class User(AbstractUser):
-    # 1. DYNAMIC BATCHES: This automatically creates a list from 1948 to next year
-    # This replaces the hardcoded list so you don't have to type 70 lines.
     BATCH_CHOICES = [(str(year), str(year)) for year in range(1948, datetime.date.today().year + 2)]
     
-    # 2. MATCH FRONTEND: Adjusted to match your Register.jsx (CS, IT, IS)
     PROGRAM_CHOICES = [
         ('CS', 'Computer Science'),
         ('IT', 'Information Technology'),
@@ -63,7 +60,6 @@ class Event(models.Model):
     def __str__(self):
         return self.event_name
     
-    # backend/api/models.py
 
 class ActivityLog(models.Model):
     MODULE_CHOICES = [
@@ -86,3 +82,12 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.action} - {self.timestamp}"
+
+# --- NEW MODEL FOR FORGOT PASSWORD ---
+class PasswordReset(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Reset for {self.user.username}"

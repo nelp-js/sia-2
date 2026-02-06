@@ -7,7 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import User, Event, ActivityLog
+import random
+from django.core.mail import send_mail
+
+from .models import User, Event, ActivityLog, PasswordReset 
+
 from .serializers import (
     UserSerializer, CurrentUserSerializer, UserListSerializer, UserUpdateSerializer,
     EventSerializer, EventUpdateSerializer, CustomTokenObtainPairSerializer, ActivityLogSerializer
@@ -63,14 +67,13 @@ def approve_user(request, user_id):
     user.is_active = True
     user.save()
 
-    # --- NEW: LOG ACTIVITY ---
+    # --- LOG ACTIVITY ---
     ActivityLog.objects.create(
         action=f"User approved: {user.username}",
         module="User Management",
         user=request.user,
         status="Completed"
     )
-    # -------------------------
 
     return Response({"detail": "User approved.", "is_approved": True, "is_active": True})
 
@@ -88,14 +91,13 @@ def reject_user(request, user_id):
     user.is_active = False
     user.save()
 
-    # --- NEW: LOG ACTIVITY ---
+    # --- LOG ACTIVITY ---
     ActivityLog.objects.create(
         action=f"User rejected: {user.username}",
         module="User Management",
         user=request.user,
         status="Rejected"
     )
-    # -------------------------
 
     return Response({"detail": "User rejected.", "is_approved": False, "is_active": False})
 
@@ -179,3 +181,56 @@ class ActivityLogListView(generics.ListAPIView):
     queryset = ActivityLog.objects.all()[:10]
     serializer_class = ActivityLogSerializer
     permission_classes = [IsAuthenticated]
+
+
+# --- PASSWORD RESET VIEWS (NEW) ---
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def request_password_reset(request):
+    email = request.data.get('email')
+    try:
+        user = User.objects.get(email=email)
+        # Generate 6-digit OTP
+        otp = str(random.randint(100000, 999999))
+        
+        # Save OTP to database (Create or Update existing)
+        PasswordReset.objects.update_or_create(user=user, defaults={'otp': otp})
+        
+        # Send Email
+        send_mail(
+            subject='Password Reset OTP - Ateneo Alumni',
+            message=f'Your verification code is: {otp}',
+            from_email=None, 
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        return Response({"detail": "OTP sent to email."})
+    except User.DoesNotExist:
+        return Response({"detail": "User with this email not found."}, status=404)
+    except Exception as e:
+        return Response({"detail": str(e)}, status=500)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reset_password(request):
+    email = request.data.get('email')
+    otp = request.data.get('otp')
+    new_password = request.data.get('password')
+    
+    try:
+        user = User.objects.get(email=email)
+        reset_entry = PasswordReset.objects.get(user=user)
+        
+        # Verify OTP
+        if reset_entry.otp == otp:
+            user.set_password(new_password)
+            user.save()
+            reset_entry.delete() # Delete OTP after use so it can't be reused
+            return Response({"detail": "Password reset successful."})
+        else:
+            return Response({"detail": "Invalid OTP."}, status=400)
+            
+    except (User.DoesNotExist, PasswordReset.DoesNotExist):
+         return Response({"detail": "Invalid request or expired code."}, status=400)
