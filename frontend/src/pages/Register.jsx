@@ -90,7 +90,7 @@ function Register() {
         dataToSend.append('first_name', formData.first_name);
         dataToSend.append('middle_name', formData.middle_name || ""); 
         dataToSend.append('last_name', formData.last_name);
-        dataToSend.append('is_married', formData.is_married);
+        dataToSend.append('is_married', formData.is_married ? 'True' : 'False'); // Fixed boolean to string for FormData
         
         if(formData.is_married && formData.maiden_name) {
             dataToSend.append('maiden_name', formData.maiden_name);
@@ -109,6 +109,7 @@ function Register() {
         dataToSend.append('valid_id', formData.valid_id);
 
         try {
+            // Updated URL to your deployed backend
             const response = await fetch('https://sia-2.onrender.com/api/user/register/', {
                 method: 'POST',
                 body: dataToSend 
@@ -161,6 +162,7 @@ function Register() {
 
                     {!success && (
                         <div className="form-fields">
+                            {/* --- NAME FIELDS --- */}
                             <div className="name-fields">
                                 <div className="form-group">
                                     <span><label>First Name</label><label style={{color: 'red'}}> *</label></span>
@@ -202,6 +204,7 @@ function Register() {
                                 </div>
                             </div>
 
+                            {/* --- MARRIAGE FIELDS --- */}
                             <div className="form-group">
                                 <label className="checkbox-label">
                                     <input
@@ -227,6 +230,7 @@ function Register() {
                                 </div>
                             )}
 
+                            {/* --- EMAIL FIELDS --- */}
                             <div className="email-fields">
                                 <div className="form-group">
                                     <span><label>Email</label><label style={{color: 'red'}}> *</label></span>
@@ -257,7 +261,7 @@ function Register() {
                                 </div>
                             </div>
 
-                            {/* --- ID TYPE SELECTION --- */}
+                            {/* --- ID SELECTION --- */}
                             <div className="form-group">
                                 <span><label>Select ID Type</label><label style={{color: 'red'}}> *</label></span>
                                 <select 
@@ -284,25 +288,34 @@ function Register() {
                                 {errors.id_type && <span className="field-error">{errors.id_type}</span>}
                             </div>
 
-                            <div className="form-group">
-                                <span><label>Upload {formData.id_type || "ID"} Image</label><label style={{color: 'red'}}> *</label></span>
-                                <input 
-                                    type="file" 
-                                    ref={fileInputRef}
-                                    onChange={handleFileChange}
-                                    style={{ display: "none" }}
-                                    accept="image/png, image/jpeg"
-                                />
-                                <button 
-                                    type="button" 
-                                    className="upload-btn"
-                                    onClick={() => fileInputRef.current.click()}
-                                >
-                                    {fileName ? fileName : "Upload Image"} 
-                                </button>
-                                {errors.valid_id && <span className="field-error">{errors.valid_id}</span>}
-                            </div>
+                            {/* --- UPLOAD BUTTON (Conditional: Only shows if ID Type is selected) --- */}
+                            {formData.id_type && (
+                                <div className="form-group fade-in-up"> {/* Added class for smooth animation */}
+                                    <span><label>Upload {formData.id_type} Image</label><label style={{color: 'red'}}> *</label></span>
+                                    <input 
+                                        type="file" 
+                                        ref={fileInputRef}
+                                        onChange={handleFileChange}
+                                        style={{ display: "none" }}
+                                        accept="image/png, image/jpeg"
+                                    />
+                                    <button 
+                                        type="button" 
+                                        className="upload-btn"
+                                        onClick={() => fileInputRef.current.click()}
+                                    >
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        {fileName ? fileName : `Browse ${formData.id_type}`} 
+                                    </button>
+                                    {errors.valid_id && <span className="field-error">{errors.valid_id}</span>}
+                                </div>
+                            )}
 
+                            {/* --- BATCH & PROGRAM --- */}
                             <div className="batch-program-fields">
                                 <div className="form-group">
                                     <span><label>Batch Year</label><label style={{color: 'red'}}> *</label></span>
