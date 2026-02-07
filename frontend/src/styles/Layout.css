@@ -64,9 +64,7 @@
 }
 
 .header-nav .header-nav-link.active {
-    text-decoration: underline;
-    text-decoration-color: #408ed1;
-    text-decoration-thickness: 2px;
+    text-decoration: none;
 }
 
 /* Footer */
