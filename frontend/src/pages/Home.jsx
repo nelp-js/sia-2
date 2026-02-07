@@ -47,7 +47,7 @@ function Home() {
                 {/* Full-width image */}
                 <section className="home-image-section">
                     <img
-                        src="/bg01.jpg"
+                        src="https://res.cloudinary.com/dwi7oftcs/image/upload/v1770416955/bg01_k3q7et.jpg"
                         alt="Ateneo campus"
                         className="home-hero-image"
                     />
